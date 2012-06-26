@@ -31,7 +31,7 @@ define drbd::resource (
   $device        = '/dev/drbd0',
   $protocol      = 'C',
   $verify_alg    = 'crc32c',
-  $manage        = 'true',
+  $manage        = true,
   $ha_primary    = false,
   $initial_setup = false,
   $fs_type       = 'ext4'
@@ -58,7 +58,7 @@ define drbd::resource (
     notify  => Service['drbd'],
   }
 
-  if $manage == 'true' {
+  if $manage {
 
     # create metadata on device, except if resource seems already initalized.
     exec { "intialize DRBD metadata for ${name}":
