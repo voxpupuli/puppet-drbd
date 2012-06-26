@@ -31,7 +31,7 @@ define drbd::resource (
   $device        = '/dev/drbd0',
   $protocol      = 'C',
   $verify_alg    = 'crc32c',
-  $manage        = 'true',
+  $manage        = true,
   $ha_primary    = false,
   $initial_setup = false,
   $fs_type       = 'ext4'
@@ -58,7 +58,7 @@ define drbd::resource (
     notify  => Service['drbd'],
   }
 
-  if $manage == 'true' {
+  if $manage {
 
     # create metadata on device, except if resource seems already initalized.
     exec { "intialize DRBD metadata for ${name}":
@@ -80,6 +80,7 @@ define drbd::resource (
         Exec["intialize DRBD metadata for ${name}"],
         Exec['modprobe drbd']
       ],
+      notify  => Service['drbd']
     }
 
 
@@ -94,27 +95,31 @@ define drbd::resource (
           path        => '/usr/bin:/usr/sbin:/bin:/sbin',
           notify      => Exec["drbd_format_volume_${name}"],
           onlyif      => "/bin/bash -c 'drbdadm status | grep ro1=.Secondary. | grep -q ro2=.Secondary.'",
+          require     => Service['drbd']
         }
         exec { "drbd_format_volume_${name}":
           command     => "mkfs.${fs_type} ${device}",
           path        => '/usr/bin:/usr/sbin:/bin:/sbin',
           refreshonly => true,
+          require     => Exec["drbd_make_primary_${name}"],
+          before      => Mount["/drbd/${name}"]
         }
       }
   
       # ensure that the device is mounted
       mount { "/drbd/${name}":
-        atboot  => true,
+        atboot  => false,
         device  => $device,
         ensure  => mounted,
         fstype  => 'auto',
-        options => 'defaults',
-        #notify  => Exec['drbd-migrate-data'],
-        require => File["/drbd/${name}"]
+        options => 'defaults,noauto',
+        require => [
+          File["/drbd/${name}"],
+          Service['drbd']
+        ],
       }
   
     }
 
   }
-
 }
