@@ -61,8 +61,10 @@ define drbd::resource (
   if $manage {
 
     # create metadata on device, except if resource seems already initalized.
+    # drbd is very tenacious about asking for aproval if there is data on the
+    # volume already.
     exec { "intialize DRBD metadata for ${name}":
-      command => "drbdadm create-md ${name}",
+      command => "yes yes | drbdadm create-md ${name}",
       onlyif  => "test -e $disk",
       unless  => "drbdadm dump-md $name || (drbdadm cstate $name | egrep -q '^(Sync|Connected)')",
       before  => Service['drbd'],
