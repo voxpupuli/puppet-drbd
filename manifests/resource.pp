@@ -61,8 +61,10 @@ define drbd::resource (
   if $manage {
 
     # create metadata on device, except if resource seems already initalized.
+    # drbd is very tenacious about asking for aproval if there is data on the
+    # volume already.
     exec { "intialize DRBD metadata for ${name}":
-      command => "drbdadm create-md ${name}",
+      command => "yes yes | drbdadm create-md ${name}",
       onlyif  => "test -e $disk",
       unless  => "drbdadm dump-md $name || (drbdadm cstate $name | egrep -q '^(Sync|Connected)')",
       before  => Service['drbd'],
@@ -93,8 +95,8 @@ define drbd::resource (
         exec { "drbd_make_primary_${name}":
           command     => "drbdadm -- --overwrite-data-of-peer primary ${name}",
           path        => '/usr/bin:/usr/sbin:/bin:/sbin',
+          unless      => "drbdadm status | grep name=.${name} | grep Primary",
           notify      => Exec["drbd_format_volume_${name}"],
-          onlyif      => "/bin/bash -c 'drbdadm status | grep ro1=.Secondary. | grep -q ro2=.Secondary.'",
           require     => Service['drbd']
         }
         exec { "drbd_format_volume_${name}":
