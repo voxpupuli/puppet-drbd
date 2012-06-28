@@ -95,8 +95,8 @@ define drbd::resource (
         exec { "drbd_make_primary_${name}":
           command     => "drbdadm -- --overwrite-data-of-peer primary ${name}",
           path        => '/usr/bin:/usr/sbin:/bin:/sbin',
+          unless      => "drbdadm status | grep name=.${name} | grep Primary",
           notify      => Exec["drbd_format_volume_${name}"],
-          onlyif      => "/bin/bash -c 'drbdadm status | grep ro1=.Secondary. | grep -q ro2=.Secondary.'",
           require     => Service['drbd']
         }
         exec { "drbd_format_volume_${name}":
