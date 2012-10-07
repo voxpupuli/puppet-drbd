@@ -1,0 +1,19 @@
+resource <%= name %> {
+
+  protocol  <%= protocol %>;
+  device    <%= device %>;
+  disk      <%= disk %>;
+  meta-disk internal;
+
+  net {
+    cram-hmac-alg sha1;
+    <% if secret -%>
+    shared-secret "<%= secret %>";
+    <% end -%>
+    #allow-two-primaries;
+  }
+
+  syncer {
+    verify-alg <%= verify_alg %>;
+  }
+

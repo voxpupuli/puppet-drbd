@@ -21,14 +21,12 @@
 #  [initial_setup] If this run is associated with the initial setup. Allows a user
 #    to only perform dangerous setup on the initial run.
 define drbd::resource (
-  $host1,
-  $host2,
-  $ip1,
-  $ip2,
+  $cluster,
   $disk,
   $secret        = false,
   $port          = '7789',
   $device        = '/dev/drbd0',
+  $mountpoint    = "/drbd/${name}",
   $protocol      = 'C',
   $verify_alg    = 'crc32c',
   $manage        = true,
@@ -36,9 +34,12 @@ define drbd::resource (
   $initial_setup = false,
   $fs_type       = 'ext4'
 ) {
+  include drbd
+  include concat::setup
 
   Exec {
-    path => ['/bin', '/sbin', '/usr/bin']
+    path      => ['/bin', '/sbin', '/usr/bin'],
+    logoutput => 'on_failure',
   }
 
   File {
@@ -46,82 +47,70 @@ define drbd::resource (
     group => 'root',
   }
 
-  file { "/drbd/${name}":
+  file { $mountpoint:
     ensure => directory,
-    mode   => 0755,
+    mode   => '0755',
   }
 
-  file { "/etc/drbd.d/${name}.res":
+  concat { "/etc/drbd.d/${name}.res":
     mode    => '0600',
-    content => template('drbd/resource.res.erb'),
-    require => Package['drbd'],
-    notify  => Service['drbd'],
+    require => [
+      Package['drbd'],
+      File['/etc/drbd.d'],
+    ],
+    notify  => Class['drbd::service'],
+  }
+  # Template uses:
+  # - $name
+  # - $protocol
+  # - $device
+  # - $disk
+  # - $secret
+  # - $verify_alg
+  # - $host1
+  # - $host2
+  # - $ip1
+  # - $ip2
+  # - $port
+  concat::fragment { "${name} drbd header":
+    target  => "/etc/drbd.d/${name}.res",
+    content => template('drbd/header.res.erb'),
+    order   => '01',
+  }
+  # Export our fragment for the clustered node
+  if $ha_primary {
+    @@concat::fragment { "${name} ${cluster} primary resource":
+      target  => "/etc/drbd.d/${name}.res",
+      content => template('drbd/resource.res.erb'),
+      order   => '10',
+    }
+  } else {
+    @@concat::fragment { "${name} ${cluster} secondary resource":
+      target  => "/etc/drbd.d/${name}.res",
+      content => template('drbd/resource.res.erb'),
+      order   => '20',
+    }
+  }
+  concat::fragment { "${name} drbd footer":
+    target  => "/etc/drbd.d/${name}.res",
+    content => "}\n",
+    order   => '99',
   }
 
-  if $manage {
+  # Import cluster nodes
+  Concat::Fragment <<| title == "${name} ${cluster} primary resource" |>>
+  Concat::Fragment <<| title == "${name} ${cluster} secondary resource" |>>
 
-    # create metadata on device, except if resource seems already initalized.
-    # drbd is very tenacious about asking for aproval if there is data on the
-    # volume already.
-    exec { "intialize DRBD metadata for ${name}":
-      command => "yes yes | drbdadm create-md ${name}",
-      onlyif  => "test -e $disk",
-      unless  => "drbdadm dump-md $name || (drbdadm cstate $name | egrep -q '^(Sync|Connected)')",
-      before  => Service['drbd'],
-      require => [
-        Exec['modprobe drbd'],
-        File["/etc/drbd.d/${name}.res"],
-      ],
-    }
-
-    exec { "enable DRBD resource ${name}":
-      command => "drbdadm up ${name}",
-      onlyif  => "drbdadm dstate ${name} | egrep -q '^Diskless/|^Unconfigured'",
-      before  => Service['drbd'],
-      require => [
-        Exec["intialize DRBD metadata for ${name}"],
-        Exec['modprobe drbd']
-      ],
-      notify  => Service['drbd']
-    }
-
-
-    # these resources should only be applied if we are configuring the
-    # primary node in our HA setup
-    if $ha_primary {
-  
-      # these things should only be done on the primary during initial setup
-      if $initial_setup {
-        exec { "drbd_make_primary_${name}":
-          command     => "drbdadm -- --overwrite-data-of-peer primary ${name}",
-          path        => '/usr/bin:/usr/sbin:/bin:/sbin',
-          unless      => "drbdadm status | grep name=.${name} | grep Primary",
-          notify      => Exec["drbd_format_volume_${name}"],
-          require     => Service['drbd']
-        }
-        exec { "drbd_format_volume_${name}":
-          command     => "mkfs.${fs_type} ${device}",
-          path        => '/usr/bin:/usr/sbin:/bin:/sbin',
-          refreshonly => true,
-          require     => Exec["drbd_make_primary_${name}"],
-          before      => Mount["/drbd/${name}"]
-        }
-      }
-  
-      # ensure that the device is mounted
-      mount { "/drbd/${name}":
-        atboot  => false,
-        device  => $device,
-        ensure  => mounted,
-        fstype  => 'auto',
-        options => 'defaults,noauto',
-        require => [
-          File["/drbd/${name}"],
-          Service['drbd']
-        ],
-      }
-  
-    }
-
+  # Due to a bug in puppet, defined() conditionals must be in a defined
+  # resource to be evaluated *after* the collector instead of before.
+  drbd::resource::enable { $name:
+    manage        => $manage,
+    disk          => $disk,
+    fs_type       => $fs_type,
+    device        => $device,
+    ha_primary    => $ha_primary,
+    initial_setup => $initial_setup,
+    cluster       => $cluster,
+    mountpoint    => $mountpoint,
   }
 }
