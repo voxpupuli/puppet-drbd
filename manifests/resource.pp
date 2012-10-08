@@ -32,6 +32,8 @@ define drbd::resource (
   $device        = '/dev/drbd0',
   $mountpoint    = "/drbd/${name}",
   $automount     = true,
+  $owner         = 'root',
+  $group         = 'root',
   $protocol      = 'C',
   $verify_alg    = 'crc32c',
   $manage        = true,
@@ -55,6 +57,8 @@ define drbd::resource (
   file { $mountpoint:
     ensure => directory,
     mode   => '0755',
+    owner  => $owner,
+    group  => $group,
   }
 
   concat { "/etc/drbd.d/${name}.res":
