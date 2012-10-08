@@ -8,7 +8,6 @@ describe 'drbd::resource', :type => :define do
   end
   let(:default_params) do
     {
-      :cluster       => 'mock_cluster',
       :disk          => '/dev/mock_disk',
       :initial_setup => true,
     }
@@ -20,7 +19,10 @@ describe 'drbd::resource', :type => :define do
         { :ipaddress => '10.16.0.1' }.merge(default_facts)
       end
       let(:params) do
-        { :ha_primary => primary }.merge(default_params)
+        {
+          :cluster    => 'mock_cluster',
+          :ha_primary => primary
+        }.merge(default_params)
       end
 
       describe "with no drbd::resource's exported" do
@@ -38,12 +40,15 @@ describe 'drbd::resource', :type => :define do
       end
     end
   end
-  context "on the primary node" do
+  context "on the primary clustered node" do
     let(:facts) do
       { :ipaddress => '10.16.0.1' }.merge(default_facts)
     end
     let(:params) do
-      { :ha_primary => true }.merge(default_params)
+      {
+        :cluster    => 'mock_cluster',
+        :ha_primary => true
+      }.merge(default_params)
     end
 
     describe "with no drbd::resource's exported" do
@@ -88,12 +93,15 @@ describe 'drbd::resource', :type => :define do
     end
   end
 
-  context "on the secondary node" do
+  context "on the secondary clustered node" do
     let(:facts) do
       { :ipaddress => '10.16.0.2' }.merge(default_facts)
     end
     let(:params) do
-      { :ha_primary => false }.merge(default_params)
+      {
+        :cluster    => 'mock_cluster',
+        :ha_primary => false
+      }.merge(default_params)
     end
 
     describe "with no drbd::resource exported" do
@@ -118,6 +126,89 @@ describe 'drbd::resource', :type => :define do
       it { should_not contain_exec('drbd_make_primary_mock_drbd_resource') }
       it { should_not contain_exec('drbd_format_volume_mock_drbd_resource') }
       it { should_not contain_mount('/drbd/mock_drbd_resource') }
+    end
+  end
+
+  context "on the primary undefined node" do
+    let(:facts) do
+      default_facts
+    end
+    let(:params) do
+      { :ha_primary => false }.merge(default_params)
+    end
+
+    it { expect { should contain_service('drbd') }.to raise_error Puppet::Error, /cluster/ }
+  end
+
+  context "on the primary static node" do
+    let(:facts) do
+      { :ipaddress => '10.16.0.1' }.merge(default_facts)
+    end
+    let(:params) do
+      {
+        :host1      => 'mock_primary',
+        :host2      => 'mock_secondary',
+        :ip1        => '10.16.0.1',
+        :ip2        => '10.16.0.2',
+        :ha_primary => true
+      }.merge(default_params)
+    end
+
+    describe "with secondary's drbd::resource exported" do
+      let(:exported_resources) do
+        { 'concat::fragment' => { 'mock_drbd_resource static secondary resource' => {
+          :target => '/etc/drbd.d/mock_drbd_resource.res',
+        } } }
+      end
+
+      it { should contain_drbd__resource__enable("mock_drbd_resource").with(
+        'cluster' => 'static'
+      ) }
+      it { should contain_service('drbd') }
+      it { should contain_concat__fragment("mock_drbd_resource static primary resource") }
+      it { should contain_concat__fragment("mock_drbd_resource static secondary resource") }
+      it { should contain_exec('initialize DRBD metadata for mock_drbd_resource') }
+      it { should contain_exec('enable DRBD resource mock_drbd_resource') }
+      it { should contain_exec('drbd_make_primary_mock_drbd_resource') }
+      it { should contain_exec('drbd_format_volume_mock_drbd_resource') }
+      it { should contain_mount('/drbd/mock_drbd_resource') }
+      it { Puppet.expects(:warning).never }
+    end
+  end
+
+  context "on the secondary static node" do
+    let(:facts) do
+      { :ipaddress => '10.16.0.2' }.merge(default_facts)
+    end
+    let(:params) do
+      {
+        :host1      => 'mock_primary',
+        :host2      => 'mock_secondary',
+        :ip1        => '10.16.0.1',
+        :ip2        => '10.16.0.2',
+        :ha_primary => false
+      }.merge(default_params)
+    end
+
+    describe "with primary's drbd::resource exported" do
+      let(:exported_resources) do
+        { 'concat::fragment' => { 'mock_drbd_resource static primary resource' => {
+          :target => '/etc/drbd.d/mock_drbd_resource.res',
+        } } }
+      end
+
+      it { should contain_drbd__resource__enable("mock_drbd_resource").with(
+        'cluster' => 'static'
+      ) }
+      it { should contain_service('drbd') }
+      it { should contain_concat__fragment("mock_drbd_resource static primary resource") }
+      it { should contain_concat__fragment("mock_drbd_resource static secondary resource") }
+      it { should contain_exec('initialize DRBD metadata for mock_drbd_resource') }
+      it { should contain_exec('enable DRBD resource mock_drbd_resource') }
+      it { should_not contain_exec('drbd_make_primary_mock_drbd_resource') }
+      it { should_not contain_exec('drbd_format_volume_mock_drbd_resource') }
+      it { should_not contain_mount('/drbd/mock_drbd_resource') }
+      it { Puppet.expects(:warning).never }
     end
   end
 end

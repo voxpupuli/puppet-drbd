@@ -21,7 +21,11 @@
 #  [initial_setup] If this run is associated with the initial setup. Allows a user
 #    to only perform dangerous setup on the initial run.
 define drbd::resource (
-  $cluster,
+  $host1         = undef,
+  $host2         = undef,
+  $ip1           = undef,
+  $ip2           = undef,
+  $cluster       = undef,
   $disk,
   $secret        = false,
   $port          = '7789',
@@ -78,28 +82,44 @@ define drbd::resource (
     order   => '01',
   }
   # Export our fragment for the clustered node
-  if $ha_primary {
+  if $ha_primary and $cluster {
     @@concat::fragment { "${name} ${cluster} primary resource":
       target  => "/etc/drbd.d/${name}.res",
       content => template('drbd/resource.res.erb'),
       order   => '10',
     }
-  } else {
+  } elsif $cluster {
     @@concat::fragment { "${name} ${cluster} secondary resource":
       target  => "/etc/drbd.d/${name}.res",
       content => template('drbd/resource.res.erb'),
       order   => '20',
     }
+  } elsif $host1 and $ip1 and $host2 and $ip2 {
+    concat::fragment { "${name} static primary resource":
+      target  => "/etc/drbd.d/${name}.res",
+      content => template('drbd/primary-resource.res.erb'),
+      order   => '10',
+    }
+    concat::fragment { "${name} static secondary resource":
+      target  => "/etc/drbd.d/${name}.res",
+      content => template('drbd/secondary-resource.res.erb'),
+      order   => '20',
+    }
+  } else {
+    fail('Must provide either cluster or host1/host2/ip1/ip2 parameters')
   }
+
   concat::fragment { "${name} drbd footer":
     target  => "/etc/drbd.d/${name}.res",
     content => "}\n",
     order   => '99',
   }
 
-  # Import cluster nodes
-  Concat::Fragment <<| title == "${name} ${cluster} primary resource" |>>
-  Concat::Fragment <<| title == "${name} ${cluster} secondary resource" |>>
+  if $cluster {
+    # Import cluster nodes
+    Concat::Fragment <<| title == "${name} ${cluster} primary resource" |>>
+    Concat::Fragment <<| title == "${name} ${cluster} secondary resource" |>>
+  }
 
   # Due to a bug in puppet, defined() conditionals must be in a defined
   # resource to be evaluated *after* the collector instead of before.
@@ -110,7 +130,10 @@ define drbd::resource (
     device        => $device,
     ha_primary    => $ha_primary,
     initial_setup => $initial_setup,
-    cluster       => $cluster,
+    cluster       => $cluster ? {
+      undef   => 'static',
+      default => $cluster,
+    },
     mountpoint    => $mountpoint,
   }
 }
