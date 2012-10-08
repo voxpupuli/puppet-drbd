@@ -31,6 +31,7 @@ define drbd::resource (
   $port          = '7789',
   $device        = '/dev/drbd0',
   $mountpoint    = "/drbd/${name}",
+  $automount     = true,
   $protocol      = 'C',
   $verify_alg    = 'crc32c',
   $manage        = true,
@@ -135,5 +136,6 @@ define drbd::resource (
       default => $cluster,
     },
     mountpoint    => $mountpoint,
+    automount     => $automount,
   }
 }
