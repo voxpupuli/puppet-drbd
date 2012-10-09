@@ -1,11 +1,11 @@
 $active_host  = 'host1'
 $passive_host = 'host2'passive
 $active_ip    = '10.0.0.2'
-$passive_ip   = '10.0.0.3' 
+$passive_ip   = '10.0.0.3'
 
 node active {
   # create logical volume for drbd
-  logical_volume { "drbd-openstack":
+  logical_volume { 'drbd-openstack':
     ensure       => present,
     # grab from this existing volume
     volume_group => 'nova-volumes',
@@ -22,7 +22,7 @@ node active {
     disk          => '/dev/mapper/nova--volumes-drbd--openstack',
     port          => '7789',
     device        => '/dev/drbd0',
-    manage        => 'true',
+    manage        => true,
     verify_alg    => 'sha1',
     ha_primary    => true,
     initial_setup => true,
@@ -32,7 +32,7 @@ node active {
 
 node passive {
   # create logical volume for drbd
-  logical_volume { "drbd-openstack":
+  logical_volume { 'drbd-openstack':
     ensure       => present,
     # grab from this existing volume
     volume_group => 'nova-volumes',
@@ -49,7 +49,7 @@ node passive {
     disk          => '/dev/mapper/nova--volumes-drbd--openstack',
     port          => '7789',
     device        => '/dev/drbd0',
-    manage        => 'true',
+    manage        => true,
     verify_alg    => 'sha1',
     ha_primary    => false,
     initial_setup => false,
