@@ -7,6 +7,7 @@ define drbd::resource::enable (
   $initial_setup,
   $cluster,
   $mountpoint,
+  $automount,
 ) {
   if defined(Concat::Fragment["${name} ${cluster} primary resource"]) and defined(Concat::Fragment["${name} ${cluster} secondary resource"]) {
     realize(Service['drbd'])
@@ -58,28 +59,33 @@ define drbd::resource::enable (
           command     => "mkfs.${fs_type} ${device}",
           refreshonly => true,
           require     => Exec["drbd_make_primary_${name}"],
-          before      => Mount[$mountpoint]
+          before      => $automount ? {
+            false   => undef,
+            default => Mount[$mountpoint],
+          },
         }
       }
 
       exec { "drbd_make_primary_again_${name}":
         command => "drbdadm primary ${name}",
         unless  => "drbdadm role ${name} | egrep '^Primary'",
-        before  => Mount[$mountpoint],
         require => Service['drbd'],
       }
 
-      # ensure that the device is mounted
-      mount { $mountpoint:
-        ensure  => mounted,
-        atboot  => false,
-        device  => $device,
-        fstype  => 'auto',
-        options => 'defaults,noauto',
-        require => [
-          File[$mountpoint],
-          Service['drbd']
-        ],
+      if $automount {
+        # ensure that the device is mounted
+        mount { $mountpoint:
+          ensure  => mounted,
+          atboot  => false,
+          device  => $device,
+          fstype  => 'auto',
+          options => 'defaults,noauto',
+          require => [
+            Exec["drbd_make_primary_again_${name}"],
+            File[$mountpoint],
+            Service['drbd']
+          ],
+        }
       }
     }
   }
