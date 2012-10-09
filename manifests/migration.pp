@@ -27,7 +27,7 @@ define drbd::migration (
     exec { "start ${service} after drbd migration":
       command     => "service ${service} start",
       refreshonly => true,
-      subscribe => File[$name]
+      subscribe   => File[$name]
     }
 
   } else {

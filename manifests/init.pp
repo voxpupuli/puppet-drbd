@@ -5,22 +5,17 @@
 # by an example created by Rackspace's cloudbuilders
 #
 class drbd {
+  include drbd::service
 
   package { 'drbd':
+    ensure => present,
     name   => 'drbd8-utils',
-    ensure => installed
   }
 
   # ensure that the kernel module is loaded
-  exec {"modprobe drbd":
+  exec { 'modprobe drbd':
     path   => ['/bin/', '/sbin/'],
-    unless => "grep -qe '^drbd ' /proc/modules",
-  }
-
-  service { 'drbd':
-    ensure  => running,
-    enable  => true,
-    require => Package['drbd8-utils']
+    unless => 'grep -qe \'^drbd \' /proc/modules',
   }
 
   File {
@@ -28,31 +23,30 @@ class drbd {
     owner   => 'root',
     group   => 'root',
     require => Package['drbd'],
-    notify  => Service['drbd'],
+    notify  => Class['drbd::service'],
   }
 
-  file { '/drbd/':
+  file { '/drbd':
     ensure => directory,
   }
 
   # this file just includes other files
   file { '/etc/drbd.conf':
     source  => 'puppet:///modules/drbd/drbd.conf',
-    notify  => Service['drbd']
   }
 
   file { '/etc/drbd.d/global_common.conf':
-    content => template('drbd/global_common.conf.erb')    
+    content => template('drbd/global_common.conf.erb')
   }
 
   # only allow files managed by puppet in this directory.
-  file { "/etc/drbd.d/":
+  file { '/etc/drbd.d':
     ensure  => directory,
     mode    => '0644',
     purge   => true,
+    recurse => true,
     force   => true,
     require => Package['drbd'],
-    notify  => Service['drbd'],
   }
 
 #  exec { "fix_drbd_runlevel":
