@@ -21,7 +21,7 @@ define drbd::resource::enable (
       ha_primary    => $ha_primary,
       initial_setup => $initial_setup,
       fs_type       => $fs_type,
-      mkfs_opts     => $mkfs_opts
+      mkfs_opts     => $mkfs_opts,
       device        => $device,
       mountpoint    => $mountpoint,
       automount     => $automount,
