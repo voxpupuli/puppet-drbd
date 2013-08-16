@@ -40,6 +40,7 @@ define drbd::resource (
   $group         = 'root',
   $protocol      = 'C',
   $verify_alg    = 'crc32c',
+  $rate          = false,
   $manage        = true,
   $ha_primary    = false,
   $initial_setup = false,

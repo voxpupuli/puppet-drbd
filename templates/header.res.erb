@@ -15,5 +15,8 @@ resource <%= name %> {
 
   syncer {
     verify-alg <%= verify_alg %>;
+<% if @rate -%>
+    rate <%= @rate %>;
+<% end -%>
   }
 
