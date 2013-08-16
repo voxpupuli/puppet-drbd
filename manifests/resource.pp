@@ -43,7 +43,8 @@ define drbd::resource (
   $manage        = true,
   $ha_primary    = false,
   $initial_setup = false,
-  $fs_type       = 'ext4'
+  $fs_type       = 'ext4',
+  $mkfs_opts     = ''
 ) {
   include drbd
   include concat::setup
@@ -147,6 +148,7 @@ define drbd::resource (
     manage        => $manage,
     disk          => $disk,
     fs_type       => $fs_type,
+    mkfs_opts     => $mkfs_opts,
     device        => $device,
     ha_primary    => $ha_primary,
     initial_setup => $initial_setup,

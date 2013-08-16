@@ -3,6 +3,7 @@ define drbd::resource::up (
   $ha_primary,
   $initial_setup,
   $fs_type,
+  $mkfs_opts,
   $device,
   $mountpoint,
   $automount,
@@ -48,7 +49,7 @@ define drbd::resource::up (
         require => Service['drbd']
       }
       exec { "drbd_format_volume_${name}":
-        command     => "mkfs.${fs_type} ${device}",
+        command     => "mkfs.${fs_type} ${mkfs_opts} ${device}",
         refreshonly => true,
         require     => Exec["drbd_make_primary_${name}"],
         before      => $automount ? {
