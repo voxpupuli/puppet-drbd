@@ -39,8 +39,7 @@ define drbd::resource (
   $manage        = true,
   $ha_primary    = false,
   $initial_setup = false,
-  $fs_type       = 'ext4',
-  $rate          = '250K'
+  $fs_type       = 'ext4'
 ) {
   include drbd
 
@@ -81,7 +80,6 @@ define drbd::resource (
   # - $ip1
   # - $ip2
   # - $port
-  # - $rate
   concat::fragment { "${name} drbd header":
     target  => "/etc/drbd.d/${name}.res",
     content => template('drbd/header.res.erb'),
