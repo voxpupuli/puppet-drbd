@@ -46,7 +46,8 @@ define drbd::resource (
   $ha_primary     = false,
   $initial_setup  = false,
   $fs_type        = 'ext4',
-  $mkfs_opts      = ''
+  $mkfs_opts      = '',
+  $handlers       = undef,
 ) {
   include drbd
 

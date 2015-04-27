@@ -11,7 +11,7 @@ class drbd(
 
   package { 'drbd':
     ensure => present,
-    name   => 'drbd8-utils',
+    name   => 'drbd84-utils',
   }
 
   # ensure that the kernel module is loaded
