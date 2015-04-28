@@ -1,0 +1,23 @@
+{
+  "author": "Puppet Labs",
+  "dependencies": [
+    {
+      "name": "puppetlabs/concat",
+      "version_requirement": "\u003e 1.0.0"
+    },
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": "\u003e\u003d 3.0.0"
+    }
+  ],
+  "description": "DRBD module",
+  "license": "Apache 2.0",
+  "name": "puppetlabs-drbd",
+  "operatingsystem_support": [],
+  "project_page": "http://github.com/puppetlabs/puppetlabs-drbd",
+  "requirements": [],
+  "source": "git://github.com/puppetlabs/puppetlabs-drbd.git",
+  "summary": "DRBD module",
+  "tags": [],
+  "version": "0.1.0"
+}

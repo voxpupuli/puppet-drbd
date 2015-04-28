@@ -47,8 +47,7 @@ define drbd::resource (
   $initial_setup  = false,
   $fs_type        = 'ext4',
   $mkfs_opts      = '',
-  $handlers       = undef,
-) {
+  $handlers       = undef,) {
   include drbd
 
   Exec {
@@ -70,12 +69,10 @@ define drbd::resource (
 
   concat { "/etc/drbd.d/${name}.res":
     mode    => '0600',
-    require => [
-      Package['drbd'],
-      File['/etc/drbd.d'],
-    ],
+    require => [Package['drbd'], File['/etc/drbd.d'],],
     notify  => Class['drbd::service'],
   }
+
   # Template uses:
   # - $name
   # - $protocol
@@ -93,6 +90,7 @@ define drbd::resource (
     content => template('drbd/header.res.erb'),
     order   => '01',
   }
+
   # Export our fragment for the clustered node
   if $ha_primary and $cluster {
     @@concat::fragment { "${name} ${cluster} primary resource":
@@ -112,6 +110,7 @@ define drbd::resource (
       content => template('drbd/primary-resource.res.erb'),
       order   => '10',
     }
+
     concat::fragment { "${name} static secondary resource":
       target  => "/etc/drbd.d/${name}.res",
       content => template('drbd/secondary-resource.res.erb'),
@@ -123,6 +122,7 @@ define drbd::resource (
       content => template('drbd/primary-stacked-resource.res.erb'),
       order   => '10',
     }
+
     concat::fragment { "${name} static stacked secondary resource":
       target  => "/etc/drbd.d/${name}.res",
       content => template('drbd/secondary-stacked-resource.res.erb'),

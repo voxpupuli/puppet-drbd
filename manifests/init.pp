@@ -1,17 +1,24 @@
-#
-# This class can be used to configure the drbd service.
+# # This class can be used to configure the drbd service.
 #
 # It has been influenced by the camptocamp module as well as
 # by an example created by Rackspace's cloudbuilders
 #
-class drbd(
-  $service_enable = true
-) {
+class drbd (
+  $service_enable      = true,
+  $drbd_package        = $drbd::params::drbd_package,
+  $drbd_kernel_package = $drbd::params::drbd_kernel_package) inherits drbd::params {
   include drbd::service
 
   package { 'drbd':
     ensure => present,
-    name   => 'drbd84-utils',
+    name   => $drbd_package,
+  }
+
+  if $drbd_kernel_package {
+    package { 'drbd_kernel':
+      ensure => present,
+      name   => $drbd_kernel_package,
+    }
   }
 
   # ensure that the kernel module is loaded
@@ -28,18 +35,12 @@ class drbd(
     notify  => Class['drbd::service'],
   }
 
-  file { '/drbd':
-    ensure => directory,
-  }
+  file { '/drbd': ensure => directory, }
 
   # this file just includes other files
-  file { '/etc/drbd.conf':
-    source  => 'puppet:///modules/drbd/drbd.conf',
-  }
+  file { '/etc/drbd.conf': source => 'puppet:///modules/drbd/drbd.conf', }
 
-  file { '/etc/drbd.d/global_common.conf':
-    content => template('drbd/global_common.conf.erb')
-  }
+  file { '/etc/drbd.d/global_common.conf': content => template('drbd/global_common.conf.erb') }
 
   # only allow files managed by puppet in this directory.
   file { '/etc/drbd.d':
@@ -51,10 +52,10 @@ class drbd(
     require => Package['drbd'],
   }
 
-#  exec { "fix_drbd_runlevel":
-#    command     =>  "update-rc.d -f drbd remove && update-rc.d drbd defaults 19",
-#    path        => [ "/sbin", "/usr/sbin", "/usr/bin/" ],
-#    unless      => "stat /etc/rc3.d/S19drbd",
-#    require => Package['drbd8-utils']
-#  }
+  #  exec { "fix_drbd_runlevel":
+  #    command     =>  "update-rc.d -f drbd remove && update-rc.d drbd defaults 19",
+  #    path        => [ "/sbin", "/usr/sbin", "/usr/bin/" ],
+  #    unless      => "stat /etc/rc3.d/S19drbd",
+  #    require => Package['drbd8-utils']
+  #  }
 }
