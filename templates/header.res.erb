@@ -5,7 +5,7 @@ resource <%= name %> {
   disk      <%= disk %>;
   meta-disk internal;
 
-<% if handlers -%>
+<% if @handlers -%>
   handlers {
   <% @handlers.sort_by {|k, v| k}.each do |k, v| -%>
     <%= k %> <%= v %>;
