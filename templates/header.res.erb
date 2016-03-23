@@ -3,7 +3,7 @@ resource <%= @name %> {
   protocol  <%= @protocol %>;
   device    <%= @device %>;
   disk      <%= @disk %>;
-  meta-disk internal;
+  meta-disk <%= @metadisk %>;
 
   net {
     cram-hmac-alg sha1;
