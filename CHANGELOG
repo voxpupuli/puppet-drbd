@@ -1,3 +1,13 @@
+2016-05-12 - Version 0.1.1
+* Updated and tested against CentOS 7.x by Sam McLeod https://github.com/sammcj | https://smcleod.net
+* While this update may not be perfect, it's a lot more usable than the 2012 version and as been working for us in production for over a year across many hosts
+* Update DRBD package name for CentOS 7, Debian Wheezy, Debian Jessie
+* Correct systemd service file permissions if package incorrectly made them executable (looking at you CentOS 7!)
+* Correct permissions on /etc/drbd.d directory
+* Correct permissions on /drbd directory
+* Add in some additional options that can be passed to DRBD resources
+* Add the ability to allow the module to update the DRBD package if enabled
+
 2012-10-14 - Version 0.1.0
 * Initial PuppetLabs release
 * Auto-discovery via exported resource
