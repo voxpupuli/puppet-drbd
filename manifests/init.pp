@@ -4,14 +4,21 @@
 # It has been influenced by the camptocamp module as well as
 # by an example created by Rackspace's cloudbuilders
 #
+#  [package_name] Defaults for CentOS / RHEL 7 compatibility
+#    Set to drbd8-utils for Debian Wheezy or Jessie
+#  [package_ensure] Defaults to installing, but not updating the package
+#    Set to latest to allow the package to be updated
+
 class drbd(
   $service_enable = true
+  $package_name   = 'drbd84-utils'
+  $package_ensure = present
 ) {
   include drbd::service
 
   package { 'drbd':
-    ensure => present,
-    name   => 'drbd8-utils',
+    ensure  => $package_ensure,
+    name    => $package_name,
   }
 
   # ensure that the kernel module is loaded
@@ -30,6 +37,7 @@ class drbd(
 
   file { '/drbd':
     ensure => directory,
+    mode   => '0755',
   }
 
   # this file just includes other files
@@ -44,17 +52,11 @@ class drbd(
   # only allow files managed by puppet in this directory.
   file { '/etc/drbd.d':
     ensure  => directory,
-    mode    => '0644',
+    mode    => '0755',
     purge   => true,
     recurse => true,
     force   => true,
     require => Package['drbd'],
   }
 
-#  exec { "fix_drbd_runlevel":
-#    command     =>  "update-rc.d -f drbd remove && update-rc.d drbd defaults 19",
-#    path        => [ "/sbin", "/usr/sbin", "/usr/bin/" ],
-#    unless      => "stat /etc/rc3.d/S19drbd",
-#    require => Package['drbd8-utils']
-#  }
 }
