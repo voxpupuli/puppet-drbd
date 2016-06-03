@@ -11,7 +11,7 @@ describe 'drbd', type: :class do
     should contain_file('/etc/drbd.d/global_common.conf')
     verify_contents(subject, '/etc/drbd.d/global_common.conf', [
       '  usage-count no;',
-      '  protocol C;',
+      '  protocol C;'
     ])
   }
 end
