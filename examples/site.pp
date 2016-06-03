@@ -1,9 +1,9 @@
 $active_host  = 'host1'
-$passive_host = 'host2'passive
+$passive_host = 'host2'
 $active_ip    = '10.0.0.2'
 $passive_ip   = '10.0.0.3'
 
-node active {
+node 'active' {
   # create logical volume for drbd
   logical_volume { 'drbd-openstack':
     ensure       => present,
@@ -12,7 +12,7 @@ node active {
     size         => '1G',
   }
 
-  class { 'drbd': }
+  include ::drbd
 
   drbd::resource { 'drbd':
     host1         => $active_host,
@@ -26,11 +26,11 @@ node active {
     verify_alg    => 'sha1',
     ha_primary    => true,
     initial_setup => true,
-    require       => Logical_volume['drbd-openstack']
+    require       => Logical_volume['drbd-openstack'],
   }
 }
 
-node passive {
+node 'passive' {
   # create logical volume for drbd
   logical_volume { 'drbd-openstack':
     ensure       => present,
@@ -39,7 +39,7 @@ node passive {
     size         => '1G',
   }
 
-  class { 'drbd': }
+  include ::drbd
 
   drbd::resource { 'drbd':
     host1         => $active_host,
@@ -53,6 +53,6 @@ node passive {
     verify_alg    => 'sha1',
     ha_primary    => false,
     initial_setup => false,
-    require       => Logical_volume['drbd-openstack']
+    require       => Logical_volume['drbd-openstack'],
   }
 }
