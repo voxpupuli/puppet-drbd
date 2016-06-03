@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'puppet/rails'
 
 describe 'drbd::resource', type: :define do
   let(:title) { 'mock_drbd_resource' }
