@@ -52,7 +52,7 @@ describe 'drbd::resource', type: :define do
     end
 
     describe "with no drbd::resource's exported" do
-      let(:exported_resources) { }
+      let(:exported_resources) {}
 
       it { should contain_concat__fragment('mock_drbd_resource mock_cluster primary resource') }
       it { should_not contain_concat__fragment('mock_drbd_resource mock_cluster secondary resource') }
@@ -105,7 +105,7 @@ describe 'drbd::resource', type: :define do
     end
 
     describe 'with no drbd::resource exported' do
-      let(:exported_resources) { }
+      let(:exported_resources) {}
 
       it { should_not contain_concat__fragment('mock_drbd_resource mock_cluster primary resource') }
       it { should contain_concat__fragment('mock_drbd_resource mock_cluster secondary resource') }
