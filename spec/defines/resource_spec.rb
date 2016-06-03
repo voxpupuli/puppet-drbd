@@ -13,7 +13,7 @@ describe 'drbd::resource', type: :define do
     }
   end
 
-  context "on any node" do
+  context 'on any node' do
     [true,false].each do |primary|
       let(:facts) do
         { ipaddress: '10.16.0.1' }.merge(default_facts)
@@ -28,8 +28,8 @@ describe 'drbd::resource', type: :define do
       describe "with no drbd::resource's exported" do
         it { should include_class('drbd') }
         it { should include_class('concat::setup') }
-        it { should contain_concat__fragment("mock_drbd_resource drbd header") }
-        it { should contain_concat__fragment("mock_drbd_resource drbd footer") }
+        it { should contain_concat__fragment('mock_drbd_resource drbd header') }
+        it { should contain_concat__fragment('mock_drbd_resource drbd footer') }
         it { should_not contain_service('drbd') }
         it { should_not contain_exec('initialize DRBD metadata for mock_drbd_resource') }
         it { should_not contain_exec('enable DRBD resource mock_drbd_resource') }
@@ -40,7 +40,7 @@ describe 'drbd::resource', type: :define do
       end
     end
   end
-  context "on the primary clustered node" do
+  context 'on the primary clustered node' do
     let(:facts) do
       { ipaddress: '10.16.0.1' }.merge(default_facts)
     end
@@ -54,8 +54,8 @@ describe 'drbd::resource', type: :define do
     describe "with no drbd::resource's exported" do
       let(:exported_resources) { }
 
-      it { should contain_concat__fragment("mock_drbd_resource mock_cluster primary resource") }
-      it { should_not contain_concat__fragment("mock_drbd_resource mock_cluster secondary resource") }
+      it { should contain_concat__fragment('mock_drbd_resource mock_cluster primary resource') }
+      it { should_not contain_concat__fragment('mock_drbd_resource mock_cluster secondary resource') }
     end
 
     describe "with secondary's drbd::resource exported" do
@@ -66,8 +66,8 @@ describe 'drbd::resource', type: :define do
       end
 
       it { should contain_service('drbd') }
-      it { should contain_concat__fragment("mock_drbd_resource mock_cluster primary resource") }
-      it { should contain_concat__fragment("mock_drbd_resource mock_cluster secondary resource") }
+      it { should contain_concat__fragment('mock_drbd_resource mock_cluster primary resource') }
+      it { should contain_concat__fragment('mock_drbd_resource mock_cluster secondary resource') }
       it { should contain_exec('initialize DRBD metadata for mock_drbd_resource') }
       it { should contain_exec('enable DRBD resource mock_drbd_resource') }
       it { should contain_exec('drbd_make_primary_mock_drbd_resource') }
@@ -88,12 +88,12 @@ describe 'drbd::resource', type: :define do
         } }
       end
 
-      it { should contain_concat__fragment("mock_drbd_resource mock_cluster secondary resource") }
-      it { should_not contain_concat__fragment("mock_drbd_resource other_cluster secondary resource") }
+      it { should contain_concat__fragment('mock_drbd_resource mock_cluster secondary resource') }
+      it { should_not contain_concat__fragment('mock_drbd_resource other_cluster secondary resource') }
     end
   end
 
-  context "on the secondary clustered node" do
+  context 'on the secondary clustered node' do
     let(:facts) do
       { ipaddress: '10.16.0.2' }.merge(default_facts)
     end
@@ -104,11 +104,11 @@ describe 'drbd::resource', type: :define do
       }.merge(default_params)
     end
 
-    describe "with no drbd::resource exported" do
+    describe 'with no drbd::resource exported' do
       let(:exported_resources) { }
 
-      it { should_not contain_concat__fragment("mock_drbd_resource mock_cluster primary resource") }
-      it { should contain_concat__fragment("mock_drbd_resource mock_cluster secondary resource") }
+      it { should_not contain_concat__fragment('mock_drbd_resource mock_cluster primary resource') }
+      it { should contain_concat__fragment('mock_drbd_resource mock_cluster secondary resource') }
     end
 
     describe "with primary's drbd::resource exported" do
@@ -119,8 +119,8 @@ describe 'drbd::resource', type: :define do
       end
 
       it { should contain_service('drbd') }
-      it { should contain_concat__fragment("mock_drbd_resource mock_cluster primary resource") }
-      it { should contain_concat__fragment("mock_drbd_resource mock_cluster secondary resource") }
+      it { should contain_concat__fragment('mock_drbd_resource mock_cluster primary resource') }
+      it { should contain_concat__fragment('mock_drbd_resource mock_cluster secondary resource') }
       it { should contain_exec('initialize DRBD metadata for mock_drbd_resource') }
       it { should contain_exec('enable DRBD resource mock_drbd_resource') }
       it { should_not contain_exec('drbd_make_primary_mock_drbd_resource') }
@@ -129,7 +129,7 @@ describe 'drbd::resource', type: :define do
     end
   end
 
-  context "on the primary undefined node" do
+  context 'on the primary undefined node' do
     let(:facts) do
       default_facts
     end
@@ -140,7 +140,7 @@ describe 'drbd::resource', type: :define do
     it { expect { should contain_service('drbd') }.to raise_error Puppet::Error, /cluster/ }
   end
 
-  context "on the primary static node" do
+  context 'on the primary static node' do
     let(:facts) do
       { ipaddress: '10.16.0.1' }.merge(default_facts)
     end
@@ -161,12 +161,12 @@ describe 'drbd::resource', type: :define do
         } } }
       end
 
-      it { should contain_drbd__resource__enable("mock_drbd_resource").with(
+      it { should contain_drbd__resource__enable('mock_drbd_resource').with(
         'cluster' => 'static'
       ) }
       it { should contain_service('drbd') }
-      it { should contain_concat__fragment("mock_drbd_resource static primary resource") }
-      it { should contain_concat__fragment("mock_drbd_resource static secondary resource") }
+      it { should contain_concat__fragment('mock_drbd_resource static primary resource') }
+      it { should contain_concat__fragment('mock_drbd_resource static secondary resource') }
       it { should contain_exec('initialize DRBD metadata for mock_drbd_resource') }
       it { should contain_exec('enable DRBD resource mock_drbd_resource') }
       it { should contain_exec('drbd_make_primary_mock_drbd_resource') }
@@ -176,7 +176,7 @@ describe 'drbd::resource', type: :define do
     end
   end
 
-  context "on the secondary static node" do
+  context 'on the secondary static node' do
     let(:facts) do
       { ipaddress: '10.16.0.2' }.merge(default_facts)
     end
@@ -197,12 +197,12 @@ describe 'drbd::resource', type: :define do
         } } }
       end
 
-      it { should contain_drbd__resource__enable("mock_drbd_resource").with(
+      it { should contain_drbd__resource__enable('mock_drbd_resource').with(
         'cluster' => 'static'
       ) }
       it { should contain_service('drbd') }
-      it { should contain_concat__fragment("mock_drbd_resource static primary resource") }
-      it { should contain_concat__fragment("mock_drbd_resource static secondary resource") }
+      it { should contain_concat__fragment('mock_drbd_resource static primary resource') }
+      it { should contain_concat__fragment('mock_drbd_resource static secondary resource') }
       it { should contain_exec('initialize DRBD metadata for mock_drbd_resource') }
       it { should contain_exec('enable DRBD resource mock_drbd_resource') }
       it { should_not contain_exec('drbd_make_primary_mock_drbd_resource') }
