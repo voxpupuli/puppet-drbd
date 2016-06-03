@@ -14,7 +14,7 @@ describe 'drbd::resource', type: :define do
   end
 
   context 'on any node' do
-    [true,false].each do |primary|
+    [true, false].each do |primary|
       let(:facts) do
         { ipaddress: '10.16.0.1' }.merge(default_facts)
       end
