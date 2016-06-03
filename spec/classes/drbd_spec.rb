@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'drbd', :type => :class do
+describe 'drbd', type: :class do
   it { should include_class('drbd::service') }
   it { should contain_package('drbd') }
   it { should contain_exec('modprobe drbd') }

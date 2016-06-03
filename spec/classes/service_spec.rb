@@ -1,4 +1,4 @@
 require 'spec_helper'
 
-describe 'drbd::service', :type => :class do
+describe 'drbd::service', type: :class do
 end
