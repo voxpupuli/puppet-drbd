@@ -26,7 +26,6 @@ describe 'drbd::resource', type: :define do
 
       describe "with no drbd::resource's exported" do
         it { should contain_class('drbd') }
-        it { should contain_class('concat::setup') }
         it { should contain_concat__fragment('mock_drbd_resource drbd header') }
         it { should contain_concat__fragment('mock_drbd_resource drbd footer') }
         it { should_not contain_service('drbd') }
@@ -60,7 +59,8 @@ describe 'drbd::resource', type: :define do
 
     describe "with secondary's drbd::resource exported" do
       let :exported_resources do
-        { 'concat::fragment' =>
+        {
+          'concat::fragment' =>
           {
             'mock_drbd_resource mock_cluster secondary resource' =>
             {
