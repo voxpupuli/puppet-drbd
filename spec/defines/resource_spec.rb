@@ -153,7 +153,7 @@ describe 'drbd::resource', type: :define do
       { ha_primary: false }.merge(default_params)
     end
 
-    it { expect { should contain_service('drbd') }.to raise_error Puppet::Error, /cluster/ }
+    it { expect { should contain_service('drbd') }.to raise_error Puppet::Error, %r{cluster} }
   end
 
   context 'on the primary static node' do
