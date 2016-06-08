@@ -1,7 +1,7 @@
 {
   "name": "puppet-drbd",
   "version": "0.2.0",
-  "author": "pupet",
+  "author": "puppet",
   "license": "MIT",
   "summary": "DRBD Module",
   "source": "https://github.com/voxpupuli/puppet-drbd",
