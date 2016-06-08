@@ -37,7 +37,7 @@ define drbd::resource (
   $automount      = true,
   $owner          = 'root',
   $group          = 'root',
-  $protocol       = 'C',
+  $protocol       = undef,
   $verify_alg     = 'crc32c',
   $rate           = false,
   $net_parameters = false,
@@ -49,6 +49,10 @@ define drbd::resource (
   $disk           = undef,
 ) {
   include ::drbd
+
+  if $protocol {
+    validate_re($protocol, '^A|B|C$')
+  }
 
   Exec {
     path      => ['/bin', '/sbin', '/usr/bin'],
@@ -69,10 +73,7 @@ define drbd::resource (
 
   concat { "/etc/drbd.d/${name}.res":
     mode    => '0600',
-    require => [
-      Package['drbd'],
-      File['/etc/drbd.d'],
-    ],
+    require => File['/etc/drbd.d'],
     notify  => Class['drbd::service'],
   }
   # Template uses:

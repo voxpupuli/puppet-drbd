@@ -2,5 +2,11 @@ global {
   usage-count no;
 }
 common {
-  protocol C;
+<% if @version == '8.3' -%>
+  protocol <%= @protocol %>;
+<% else -%>
+  net {
+    protocol <%= @protocol %>;
+  }
+<% end -%>
 }

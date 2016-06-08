@@ -1,6 +1,8 @@
 resource <%= @name %> {
 
+<% unless @protocol.nil? -%>
   protocol  <%= @protocol %>;
+<% end -%>
   device    <%= @device %>;
   disk      <%= @disk %>;
   meta-disk internal;

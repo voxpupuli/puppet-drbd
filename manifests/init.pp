@@ -5,14 +5,28 @@
 # by an example created by Rackspace's cloudbuilders
 #
 class drbd(
-  $service_enable = true
-) {
+  $service_enable   = true,
+  $version          = $::drbd::params::version,
+  $package_name     = $::drbd::params::package_name,
+  $manage_repo      = $::drbd::params::manage_repo,
+  $protocol         = 'C',
+) inherits ::drbd::params {
   include ::drbd::service
 
-  package { 'drbd':
-    ensure => present,
-    name   => 'drbd8-utils',
+  validate_bool($service_enable)
+  validate_bool($manage_repo)
+  validate_re($protocol, '^A|B|C$')
+  validate_re($version, '^8\.3|8\.4$', 'The drbd module supports versions 8.3 and 8.4 of DRBD only')
+
+  if $manage_repo {
+    case $::osfamily {
+      'RedHat': {
+        unless $::operatingsystem == 'Fedora' { require ::elrepo }
+      }
+      default: { }
+    }
   }
+  ensure_packages($package_name)
 
   # ensure that the kernel module is loaded
   exec { 'modprobe drbd':
@@ -24,7 +38,7 @@ class drbd(
     mode    => '0644',
     owner   => 'root',
     group   => 'root',
-    require => Package['drbd'],
+    require => Package[$package_name],
     notify  => Class['drbd::service'],
   }
 
@@ -48,7 +62,6 @@ class drbd(
     purge   => true,
     recurse => true,
     force   => true,
-    require => Package['drbd'],
   }
 
 }
