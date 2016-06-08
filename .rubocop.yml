@@ -254,7 +254,7 @@ Style/ConstantName:
   Enabled: true
 
 Style/Documentation:
-  Enabled: true
+  Enabled: false
 
 Style/DefWithParentheses:
   Enabled: true
@@ -446,8 +446,10 @@ Style/RedundantBegin:
 Style/RescueModifier:
   Enabled: true
 
+# based on https://github.com/voxpupuli/modulesync_config/issues/168
 Style/RegexpLiteral:
-  Enabled: false
+  EnforcedStyle: percent_r
+  Enabled: true
 
 Lint/UnderscorePrefixedVariableName:
   Enabled: true
