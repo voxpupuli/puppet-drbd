@@ -83,14 +83,19 @@ describe 'drbd::resource', type: :define do
 
     describe "with other cluster's drbd::resource exported" do
       let :exported_resources do
-        { 'concat::fragment' => {
-          'mock_drbd_resource mock_cluster secondary resource' => {
-            target: '/etc/drbd.d/mock_drbd_resource.res'
-          },
-          'mock_drbd_resource other_cluster secondary resource' => {
-            target: '/etc/drbd.d/mock_drbd_resource.res'
+        {
+          'concat::fragment' =>
+          {
+            'mock_drbd_resource mock_cluster secondary resource' =>
+            {
+              target: '/etc/drbd.d/mock_drbd_resource.res'
+            },
+            'mock_drbd_resource other_cluster secondary resource' =>
+            {
+              target: '/etc/drbd.d/mock_drbd_resource.res'
+            }
           }
-        } }
+        }
       end
 
       it { should contain_concat__fragment('mock_drbd_resource mock_cluster secondary resource') }
@@ -118,9 +123,15 @@ describe 'drbd::resource', type: :define do
 
     describe "with primary's drbd::resource exported" do
       let :exported_resources do
-        { 'concat::fragment' => { 'mock_drbd_resource mock_cluster primary resource' => {
-          target: '/etc/drbd.d/mock_drbd_resource.res'
-        } } }
+        {
+          'concat::fragment' =>
+          {
+            'mock_drbd_resource mock_cluster primary resource' =>
+            {
+              target: '/etc/drbd.d/mock_drbd_resource.res'
+            }
+          }
+        }
       end
 
       it { should contain_service('drbd') }
@@ -161,9 +172,15 @@ describe 'drbd::resource', type: :define do
 
     describe "with secondary's drbd::resource exported" do
       let :exported_resources do
-        { 'concat::fragment' => { 'mock_drbd_resource static secondary resource' => {
-          target: '/etc/drbd.d/mock_drbd_resource.res'
-        } } }
+        {
+          'concat::fragment' =>
+          {
+            'mock_drbd_resource static secondary resource' =>
+            {
+              target: '/etc/drbd.d/mock_drbd_resource.res'
+            }
+          }
+        }
       end
 
       it do
@@ -199,9 +216,15 @@ describe 'drbd::resource', type: :define do
 
     describe "with primary's drbd::resource exported" do
       let :exported_resources do
-        { 'concat::fragment' => { 'mock_drbd_resource static primary resource' => {
-          target: '/etc/drbd.d/mock_drbd_resource.res'
-        } } }
+        {
+          'concat::fragment' =>
+          {
+            'mock_drbd_resource static primary resource' =>
+              {
+                target: '/etc/drbd.d/mock_drbd_resource.res'
+              }
+          }
+        }
       end
 
       it do
