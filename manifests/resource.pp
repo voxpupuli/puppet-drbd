@@ -90,7 +90,7 @@ define drbd::resource (
   # - $port
   concat::fragment { "${name} drbd header":
     target  => "/etc/drbd.d/${name}.res",
-    content => template('drbd/header.res.erb'),
+    content => template("drbd/header${$::drbd::version}.res.erb"),
     order   => '01',
   }
   # Export our fragment for the clustered node
