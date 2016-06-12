@@ -40,7 +40,7 @@ define drbd::resource (
   $protocol       = undef,
   $verify_alg     = 'crc32c',
   $rate           = false,
-  $net_parameters = false,
+  $net_parameters = {},
   $manage         = true,
   $ha_primary     = false,
   $initial_setup  = false,
@@ -53,6 +53,7 @@ define drbd::resource (
   if $protocol {
     validate_re($protocol, '^A|B|C$')
   }
+  validate_hash($net_parameters)
 
   Exec {
     path      => ['/bin', '/sbin', '/usr/bin'],

@@ -14,10 +14,8 @@ resource <%= @name %> {
     shared-secret "<%= @secret %>";
 <% end -%>
     #allow-two-primaries;
-<% if @net_parameters -%>
 <% @net_parameters.sort_by {|k, v| k}.each do |k, v| -%>
     <%= k %> <%= v %>;
-<% end -%>
 <% end -%>
   }
 
