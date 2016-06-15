@@ -5,11 +5,12 @@
 # by an example created by Rackspace's cloudbuilders
 #
 class drbd(
-  $service_enable   = true,
-  $version          = $::drbd::params::version,
-  $package_name     = $::drbd::params::package_name,
-  $manage_repo      = $::drbd::params::manage_repo,
-  $protocol         = 'C',
+  $service_enable    = true,
+  $version           = $::drbd::params::version,
+  $package_name      = $::drbd::params::package_name,
+  $kmod_package_name = $::drbd::params::kmod_package_name,
+  $manage_repo       = $::drbd::params::manage_repo,
+  $protocol          = 'C',
 ) inherits ::drbd::params {
   include ::drbd::service
 
@@ -29,6 +30,12 @@ class drbd(
   ensure_packages($package_name)
 
   # ensure that the kernel module is loaded
+  if $kmod_package_name {
+    package { $kmod_package_name:
+      ensure => 'present',
+      before => Exec['modprobe drbd'],
+    }
+  }
   exec { 'modprobe drbd':
     path   => ['/bin/', '/sbin/'],
     unless => 'grep -qe \'^drbd \' /proc/modules',
