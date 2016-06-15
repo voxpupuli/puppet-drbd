@@ -6,6 +6,7 @@ describe 'drbd', type: :class do
       let(:facts) do
         facts
       end
+      it { is_expected.to compile.with_all_deps }
       it { should contain_class('drbd::service') }
       case facts[:osfamily]
       when 'RedHat'
