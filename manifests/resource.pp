@@ -55,16 +55,6 @@ define drbd::resource (
   }
   validate_hash($net_parameters)
 
-  Exec {
-    path      => ['/bin', '/sbin', '/usr/bin'],
-    logoutput => 'on_failure',
-  }
-
-  File {
-    owner => 'root',
-    group => 'root',
-  }
-
   file { $mountpoint:
     ensure => directory,
     mode   => '0755',

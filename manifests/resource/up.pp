@@ -8,6 +8,10 @@ define drbd::resource::up (
   $mountpoint,
   $automount,
 ) {
+  Exec {
+    path            => ['/bin', '/sbin', '/usr/bin'],
+    logoutput => 'on_failure',
+  }
   # create metadata on device, except if resource seems already initalized.
   # drbd is very tenacious about asking for aproval if there is data on the
   # volume already.
@@ -19,7 +23,7 @@ define drbd::resource::up (
     require => [
       Exec['modprobe drbd'],
       File["/etc/drbd.d/${name}.res"],
-      ],
+    ],
     notify  => Service['drbd'],
   }
 
@@ -30,7 +34,7 @@ define drbd::resource::up (
     require => [
       Exec["initialize DRBD metadata for ${name}"],
       Exec['modprobe drbd']
-      ],
+    ],
     notify  => Service['drbd'],
   }
 

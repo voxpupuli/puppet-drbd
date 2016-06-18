@@ -41,25 +41,23 @@ class drbd(
     unless => 'grep -qe \'^drbd \' /proc/modules',
   }
 
-  File {
-    mode    => '0644',
-    owner   => 'root',
-    group   => 'root',
-    require => Package[$package_name],
-    notify  => Class['drbd::service'],
-  }
-
   file { '/drbd':
     ensure => directory,
+    mode   => '0644',
   }
 
   # this file just includes other files
   file { '/etc/drbd.conf':
     source  => 'puppet:///modules/drbd/drbd.conf',
+    mode    => '0644',
+    require => Package[$package_name],
+    notify  => Class['drbd::service'],
   }
 
   file { '/etc/drbd.d/global_common.conf':
     content => template('drbd/global_common.conf.erb'),
+    mode    => '0644',
+    notify  => Class['drbd::service'],
   }
 
   # only allow files managed by puppet in this directory.
@@ -69,6 +67,7 @@ class drbd(
     purge   => true,
     recurse => true,
     force   => true,
+    require => Package[$package_name],
   }
 
 }
