@@ -18,7 +18,7 @@ define drbd::resource::up (
     before  => Service['drbd'],
     require => [
       Exec['modprobe drbd'],
-      File["/etc/drbd.d/${name}.res"],
+      Concat["/etc/drbd.d/${name}.res"],
       ],
     notify  => Service['drbd'],
   }
