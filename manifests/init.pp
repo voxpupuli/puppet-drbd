@@ -45,7 +45,7 @@ class drbd(
   file { '/etc/drbd.d':
     ensure  => directory,
     mode    => '0644',
-    purge   => true,
+#    purge   => true,
     recurse => true,
     force   => true,
     require => Package['drbd'],
