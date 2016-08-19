@@ -1,7 +1,7 @@
 {
   "name": "puppet-drbd",
   "version": "0.2.0",
-  "author": "puppet",
+  "author": "Vox Pupuli",
   "license": "Apache-2.0",
   "summary": "DRBD Module",
   "source": "https://github.com/voxpupuli/puppet-drbd",
@@ -11,7 +11,7 @@
   "operatingsystem_support": [
     {
       "operatingsystem": "RedHat",
-      "operatingsystemrelease": [ 
+      "operatingsystemrelease": [
         "6",
         "7"
       ]
@@ -32,7 +32,7 @@
     }
   ],
   "dependencies": [
-    { "name": "puppetlabs/stdlib", "version_requirement": ">3.x" },
-    { "name": "puppetlabs/concat", "version_requirement": ">1.x" }
+    { "name": "puppetlabs/stdlib", "version_requirement": ">= 3.0.0" },
+    { "name": "puppetlabs/concat", "version_requirement": ">= 1.0.0" }
   ]
 }
