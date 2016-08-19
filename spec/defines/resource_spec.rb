@@ -186,7 +186,7 @@ describe 'drbd::resource', type: :define do
       it do
         should contain_drbd__resource__enable('mock_drbd_resource').with(
           'cluster' => 'static'
-      )
+        )
       end
       it { should contain_service('drbd') }
       it { should contain_concat__fragment('mock_drbd_resource static primary resource') }
@@ -230,7 +230,7 @@ describe 'drbd::resource', type: :define do
       it do
         should contain_drbd__resource__enable('mock_drbd_resource').with(
           'cluster' => 'static'
-      )
+        )
       end
       it { should contain_service('drbd') }
       it { should contain_concat__fragment('mock_drbd_resource static primary resource') }
