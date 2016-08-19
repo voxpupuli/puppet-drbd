@@ -1,3 +1,6 @@
+##
+# this file requires this rspec patch: https://github.com/rodjek/rspec-puppet/pull/51
+##
 require 'spec_helper'
 
 describe 'drbd::resource', type: :define do
