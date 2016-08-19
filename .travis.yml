@@ -31,10 +31,16 @@ matrix:
     env: PUPPET_VERSION="~> 4.0" STRICT_VARIABLES="yes" CHECK=rubocop
   - rvm: 2.3.1
     env: PUPPET_VERSION="~> 4.0" STRICT_VARIABLES="yes" CHECK=test
+  - rvm: 2.4.0-preview1
+    env: PUPPET_VERSION="~> 4.0" STRICT_VARIABLES="yes" CHECK=test
+  allow_failures:
+    - rvm: 2.4.0-preview1
 notifications:
   email: false
 deploy:
   provider: puppetforge
+  deploy:
+    branch: ha-bug-puppet-forge
   user: puppet
   password:
     secure: "YIElFf7E+TbG/FZzt9dx0Tt6+3RtbYmDbMBJuvfLdtHi+1FsnrGHhmIF1Yr0QGQ6iDrGIwY7AAL9h2587zLngZzm9T4EkVs0sbpcbDD2UivxptAbSVyBaXB/08MMfgG5UGwIhpJ8aXUebaABI32dPaPuREL6ce56+Cvlq0iaOII="
