@@ -7,7 +7,7 @@
 class drbd(
   $service_enable = true
 ) {
-  include drbd::service
+  include ::drbd::service
 
   package { 'drbd':
     ensure => present,
@@ -38,7 +38,7 @@ class drbd(
   }
 
   file { '/etc/drbd.d/global_common.conf':
-    content => template('drbd/global_common.conf.erb')
+    content => template('drbd/global_common.conf.erb'),
   }
 
   # only allow files managed by puppet in this directory.
@@ -51,10 +51,4 @@ class drbd(
     require => Package['drbd'],
   }
 
-#  exec { "fix_drbd_runlevel":
-#    command     =>  "update-rc.d -f drbd remove && update-rc.d drbd defaults 19",
-#    path        => [ "/sbin", "/usr/sbin", "/usr/bin/" ],
-#    unless      => "stat /etc/rc3.d/S19drbd",
-#    require => Package['drbd8-utils']
-#  }
 }
