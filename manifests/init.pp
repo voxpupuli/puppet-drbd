@@ -5,13 +5,14 @@
 # by an example created by Rackspace's cloudbuilders
 #
 class drbd(
-  $service_enable = true
+  $service_enable = true,
+  $package_name = 'drbd8-utils',
 ) {
   include ::drbd::service
 
   package { 'drbd':
     ensure => present,
-    name   => 'drbd8-utils',
+    name   => $package_name,
   }
 
   # ensure that the kernel module is loaded
