@@ -1,3 +1,13 @@
+## 2016-12-24 Release 0.3.0
+
+* Modulesync with latest Vox Pupuli defaults
+* Support puppetlabs-concat >= 2
+* Cleanup spec tests
+* use drbd as package name resource
+* Add minimal documentation
+* Add missing require of package drbd in drbd::service
+* Set minimum version dependencies (for Puppet 4)
+
 ## 2016-08-19 Release 0.2.0
 
   * First release in the Vox Pupuli namespace
