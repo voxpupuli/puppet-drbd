@@ -1,3 +1,11 @@
+# Changelog
+
+# 2017-02-11 Release 0.4.0
+
+This is the last release with Puppet3 support!
+* Modulesync with latest Vox Pupuli defaults
+* Allow changing of drbd-utils pacakge name
+
 ## 2016-12-24 Release 0.3.0
 
 * Modulesync with latest Vox Pupuli defaults
