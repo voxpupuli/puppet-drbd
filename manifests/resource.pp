@@ -47,6 +47,7 @@ define drbd::resource (
   $fs_type        = 'ext4',
   $mkfs_opts      = '',
   $disk           = undef,
+  $mount_options  = undef,
 ) {
   include ::drbd
 
@@ -160,5 +161,6 @@ define drbd::resource (
     cluster       => $_cluster,
     mountpoint    => $mountpoint,
     automount     => $automount,
+    mount_options => $mount_options,
   }
 }

@@ -48,7 +48,8 @@ describe 'drbd::resource', type: :define do
     let :params do
       {
         cluster: 'mock_cluster',
-        ha_primary: true
+        ha_primary: true,
+        mount_options: [ 'noatime', 'someotheroption' ]
       }.merge(default_params)
     end
 
@@ -80,7 +81,7 @@ describe 'drbd::resource', type: :define do
       it { should contain_exec('enable DRBD resource mock_drbd_resource') }
       it { should contain_exec('drbd_make_primary_mock_drbd_resource') }
       it { should contain_exec('drbd_format_volume_mock_drbd_resource') }
-      it { should contain_mount('/drbd/mock_drbd_resource') }
+      it { should contain_mount('/drbd/mock_drbd_resource').with_options('noauto,noatime,someotheroption') }
       it { Puppet.expects(:warning).never }
     end
 
