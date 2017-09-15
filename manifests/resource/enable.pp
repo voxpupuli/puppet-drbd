@@ -9,6 +9,7 @@ define drbd::resource::enable (
   $cluster,
   $mountpoint,
   $automount,
+  $mount_options,
 ) {
   if defined(Concat::Fragment["${name} ${cluster} primary resource"]) and defined(Concat::Fragment["${name} ${cluster} secondary resource"]) {
     realize(Service['drbd'])
@@ -25,6 +26,7 @@ define drbd::resource::enable (
       device        => $device,
       mountpoint    => $mountpoint,
       automount     => $automount,
+      mount_options => $mount_options,
     }
   }
 }

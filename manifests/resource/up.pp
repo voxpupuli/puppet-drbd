@@ -7,6 +7,7 @@ define drbd::resource::up (
   $device,
   $mountpoint,
   $automount,
+  $mount_options,
 ) {
   # create metadata on device, except if resource seems already initalized.
   # drbd is very tenacious about asking for aproval if there is data on the
@@ -67,13 +68,18 @@ define drbd::resource::up (
     }
 
     if $automount {
+      if $mount_options {
+        $options = flatten(['noauto'], $mount_options)
+      } else {
+        $options = ['defaults','noauto']
+      }
       # ensure that the device is mounted
       mount { $mountpoint:
         ensure  => mounted,
         atboot  => false,
         device  => $device,
         fstype  => 'auto',
-        options => 'defaults,noauto',
+        options => join($options, ','),
         require => [
           Exec["drbd_make_primary_again_${name}"],
           File[$mountpoint],
