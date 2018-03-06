@@ -5,8 +5,8 @@
 # by an example created by Rackspace's cloudbuilders
 #
 class drbd(
-  $service_enable = true
-  $manage_confdir = true
+  $service_enable = true,
+  $manage_confdir = true,
 ) {
   include ::drbd::service
 
