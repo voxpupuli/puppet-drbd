@@ -7,12 +7,13 @@
 class drbd(
   $service_enable = true,
   $manage_confdir = true,
+  $package_name = 'drbd8-utils',
 ) {
   include ::drbd::service
 
   package { 'drbd':
     ensure => present,
-    name   => 'drbd8-utils',
+    name   => $package_name,
   }
 
   # ensure that the kernel module is loaded
