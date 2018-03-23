@@ -5,7 +5,7 @@ define drbd::migration (
 ) {
 
   Exec {
-    path => ['/sbin', '/bin', '/usr/sbin', '/usr/bin']
+    path => ['/sbin', '/bin', '/usr/sbin', '/usr/bin'],
   }
 
   exec { "stop ${service} for drbd migration":
@@ -13,7 +13,7 @@ define drbd::migration (
     # this should probably be more precise. If we're not linked into the
     # drbd volume we still would need to migrate
     unless  => "test -L ${name}",
-    require => Drbd::Resource[$volume]
+    require => Drbd::Resource[$volume],
   }
 
   if $ha_primary {
@@ -21,13 +21,13 @@ define drbd::migration (
       command     => "mv ${name} /drbd/${volume}/${service}",
       subscribe   => Exec["stop ${service} for drbd migration"],
       before      => File[$name],
-      refreshonly => true
+      refreshonly => true,
     }
 
     exec { "start ${service} after drbd migration":
       command     => "service ${service} start",
       refreshonly => true,
-      subscribe   => File[$name]
+      subscribe   => File[$name],
     }
 
   } else {
@@ -35,7 +35,7 @@ define drbd::migration (
       command     => "rm -r ${name}",
       subscribe   => Exec["stop ${service} for drbd migration"],
       before      => File[$name],
-      refreshonly => true
+      refreshonly => true,
     }
   }
 

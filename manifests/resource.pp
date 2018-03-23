@@ -51,8 +51,9 @@ define drbd::resource (
   $initial_setup      = false,
   $fs_type            = 'ext4',
   $mkfs_opts          = '',
+  $disk               = undef,
 ) {
-  include drbd
+  include ::drbd
 
   Exec {
     path      => ['/bin', '/sbin', '/usr/bin'],
@@ -149,6 +150,10 @@ define drbd::resource (
 
   # Due to a bug in puppet, defined() conditionals must be in a defined
   # resource to be evaluated *after* the collector instead of before.
+  $_cluster = $cluster ? {
+    undef   => 'static',
+    default => $cluster,
+  }
   drbd::resource::enable { $name:
     manage        => $manage,
     disk          => $disk,
@@ -157,10 +162,7 @@ define drbd::resource (
     device        => $device,
     ha_primary    => $ha_primary,
     initial_setup => $initial_setup,
-    cluster       => $cluster ? {
-      undef   => 'static',
-      default => $cluster,
-    },
+    cluster       => $_cluster,
     mountpoint    => $mountpoint,
     automount     => $automount,
   }

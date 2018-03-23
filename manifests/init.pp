@@ -14,7 +14,7 @@ class drbd(
   $package_name   = 'drbd84-utils'
   $package_ensure = present
 ) {
-  include drbd::service
+  include ::drbd::service
 
   package { 'drbd':
     ensure  => $package_ensure,
@@ -46,7 +46,7 @@ class drbd(
   }
 
   file { '/etc/drbd.d/global_common.conf':
-    content => template('drbd/global_common.conf.erb')
+    content => template('drbd/global_common.conf.erb'),
   }
 
   # only allow files managed by puppet in this directory.
