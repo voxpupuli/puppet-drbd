@@ -19,12 +19,6 @@
       ]
     },
     {
-      "operatingsystem": "Debian",
-      "operatingsystemrelease": [
-        "7"
-      ]
-    },
-    {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
         "14.04"
@@ -44,7 +38,7 @@
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 4.7.1 < 6.0.0"
+      "version_requirement": ">= 4.10.0 < 6.0.0"
     }
   ]
 }
