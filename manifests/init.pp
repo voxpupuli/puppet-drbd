@@ -6,13 +6,21 @@
 #
 class drbd(
   $service_enable = true,
-  $package_name = 'drbd8-utils',
+#The pacakage drbd8-utils does not work on CentOS 
+  $package_name = 'drbd84-utils',
 ) {
   include ::drbd::service
 
   package { 'drbd':
     ensure => present,
     name   => $package_name,
+  }
+  
+  #Kernel module should be installalled before loading it in CentOS 
+  
+   package { 'drbdModule':
+    ensure => present,
+    name   => 'kmod-drbd84'
   }
 
   # ensure that the kernel module is loaded
