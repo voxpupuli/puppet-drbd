@@ -6,21 +6,17 @@
 #
 class drbd(
   $service_enable = true,
-#The pacakage drbd8-utils does not work on CentOS 
-  $package_name = 'drbd84-utils',
-) {
+# Package name from the params file
+  $package_name = $drbd::params::package_name,
+# Inherit the main class from params class
+
+) inherits drbd::params {
   include ::drbd::service
 
-  package { 'drbd':
+#Update package name
+
+  package { $package_name:
     ensure => present,
-    name   => $package_name,
-  }
-  
-  #Kernel module should be installalled before loading it in CentOS 
-  
-   package { 'drbdModule':
-    ensure => present,
-    name   => 'kmod-drbd84'
   }
 
   # ensure that the kernel module is loaded
@@ -33,7 +29,7 @@ class drbd(
     mode    => '0644',
     owner   => 'root',
     group   => 'root',
-    require => Package['drbd'],
+    require => Package[$package_name],
     notify  => Class['drbd::service'],
   }
 
@@ -57,7 +53,7 @@ class drbd(
     purge   => true,
     recurse => true,
     force   => true,
-    require => Package['drbd'],
+    require => Package[$package_name],
   }
 
 }
