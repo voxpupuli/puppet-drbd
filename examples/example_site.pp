@@ -8,21 +8,15 @@ $drbd_port      = '7789'
 $drbd_device    = '/dev/drbd0'
 
 node 'HOST1' {
-
   host {
-
     $primary_host:
         ip     => $primary_ip,
         ensure => present,
-
         }
-
   host {
-
     $secondary_host:
         ip      =>  $secondary_ip,
         ensure  =>  present,
-
         }
 
   include ::drbd
@@ -47,21 +41,15 @@ node 'HOST1' {
 }
 
 node 'HOST2' {
-
    host {
-
     $primary_host:
         ip     => $primary_ip,
         ensure => present,
-
         }
-
   host {
-
     $secondary_host:
         ip      =>  $secondary_ip,
         ensure  =>  present,
-
         }
 
   include ::drbd
