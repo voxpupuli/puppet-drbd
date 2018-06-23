@@ -50,7 +50,7 @@ class drbd(
   file { '/etc/drbd.d':
     ensure  => directory,
     mode    => '0644',
-    purge   => true,
+    purge   => false,   #Setting true won't allow to create more than one drbd volumes. 
     recurse => true,
     force   => true,
     require => Package[$package_name],
