@@ -6,9 +6,7 @@
 #
 class drbd(
   $service_enable = true,
-# Package name from the params file
-  $package_name = $drbd::params::package_name,
-# Inherit the main class from params class
+  Variant[String, Array[String]] $package_name = $drbd::params::package_name,
 
 ) inherits drbd::params {
   include ::drbd::service
@@ -50,7 +48,7 @@ class drbd(
   file { '/etc/drbd.d':
     ensure  => directory,
     mode    => '0644',
-    purge   => false, 
+    purge   => true, 
     recurse => true,
     force   => true,
     require => Package[$package_name],
