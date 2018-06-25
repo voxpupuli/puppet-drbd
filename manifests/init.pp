@@ -7,7 +7,7 @@
 class drbd(
   $service_enable = true,
   Variant[String, Array[String]] $package_name = $drbd::params::package_name,
-) inherits drbd::params {
+) inherits ::drbd::params {
   include ::drbd::service
 
 #Update package name
