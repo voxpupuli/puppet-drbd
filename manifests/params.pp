@@ -1,7 +1,7 @@
 #Class to add the package name 
 #
 class drbd::params {
-    case $::osfamily {
+    case $::facts['os']['family'] {
         'Debian': {
             $package_name = 'drbd8-utils'
         }
