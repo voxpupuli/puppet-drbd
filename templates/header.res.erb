@@ -33,3 +33,12 @@ resource <%= @name %> {
   }
 <% end -%>
 
+<% if @startup_parameters -%>
+  
+  startup  {
+<% @startup_parameters.sort_by {|k, v| k}.each do |k, v| -%>
+	<%= k %> <%= v %>;
+<% end -%>
+   }
+<% end -%>
+
