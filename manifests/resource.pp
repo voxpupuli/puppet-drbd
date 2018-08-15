@@ -19,36 +19,38 @@
 #  [verify_alg] Algorithm used for block validation on peers. Optional.
 #    Defaults to crc32c. Accepts crc32c, sha1, or md5.
 #  [disk_parameters] Parameters for disk{} section
+#  [startup_parameters] Parameters for startup{} section
 #  [manage] If the actual drbd resource shoudl be managed.
 #  [ha_primary] If the resource is being applied on the primary host.
 #  [initial_setup] If this run is associated with the initial setup. Allows a user
 #    to only perform dangerous setup on the initial run.
 define drbd::resource (
-  $host1           = undef,
-  $host2           = undef,
-  $ip1             = undef,
-  $ip2             = undef,
-  $res1            = undef,
-  $res2            = undef,
-  $cluster         = undef,
-  $secret          = false,
-  $port            = '7789',
-  $device          = '/dev/drbd0',
-  $mountpoint      = "/drbd/${name}",
-  $automount       = true,
-  $owner           = 'root',
-  $group           = 'root',
-  $protocol        = 'C',
-  $verify_alg      = 'crc32c',
-  $rate            = false,
-  $disk_parameters = false,
-  $net_parameters  = false,
-  $manage          = true,
-  $ha_primary      = false,
-  $initial_setup   = false,
-  $fs_type         = 'ext4',
-  $mkfs_opts       = '',
-  $disk            = undef,
+  $host1              = undef,
+  $host2              = undef,
+  $ip1                = undef,
+  $ip2                = undef,
+  $res1               = undef,
+  $res2               = undef,
+  $cluster            = undef,
+  $secret             = false,
+  $port               = '7789',
+  $device             = '/dev/drbd0',
+  $mountpoint         = "/drbd/${name}",
+  $automount          = true,
+  $owner              = 'root',
+  $group              = 'root',
+  $protocol           = 'C',
+  $verify_alg         = 'crc32c',
+  $rate               = false,
+  $disk_parameters    = false,
+  $net_parameters     = false,
+  $startup_parameters = false,
+  $manage             = true,
+  $ha_primary         = false,
+  $initial_setup      = false,
+  $fs_type            = 'ext4',
+  $mkfs_opts          = '',
+  $disk               = undef,
 ) {
   include ::drbd
 
