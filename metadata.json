@@ -1,6 +1,6 @@
 {
   "name": "puppet-drbd",
-  "version": "0.5.2",
+  "version": "0.5.3-rc0",
   "author": "Vox Pupuli",
   "license": "Apache-2.0",
   "summary": "DRBD Module",
