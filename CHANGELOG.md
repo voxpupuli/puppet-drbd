@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v0.5.2](https://github.com/voxpupuli/puppet-drbd/tree/v0.5.2) (2018-10-20)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-drbd/compare/v0.5.1...v0.5.2)
+
+**Merged pull requests:**
+
+- modulesync 2.1.0 and allow puppet 6.x [\#81](https://github.com/voxpupuli/puppet-drbd/pull/81) ([bastelfreak](https://github.com/bastelfreak))
+
 ## [v0.5.1](https://github.com/voxpupuli/puppet-drbd/tree/v0.5.1) (2018-09-06)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-drbd/compare/v0.5.0...v0.5.1)
