@@ -6,13 +6,14 @@
 #
 class drbd(
   $service_enable = true,
-  $package_name = 'drbd8-utils',
-) {
+  Variant[String, Array[String]] $package_name = $drbd::params::package_name,
+) inherits ::drbd::params {
   include ::drbd::service
 
-  package { 'drbd':
+#Update package name
+
+  package { $package_name:
     ensure => present,
-    name   => $package_name,
   }
 
   # ensure that the kernel module is loaded
@@ -25,7 +26,7 @@ class drbd(
     mode    => '0644',
     owner   => 'root',
     group   => 'root',
-    require => Package['drbd'],
+    require => Package[$package_name],
     notify  => Class['drbd::service'],
   }
 
@@ -49,7 +50,7 @@ class drbd(
     purge   => true,
     recurse => true,
     force   => true,
-    require => Package['drbd'],
+    require => Package[$package_name],
   }
 
 }
