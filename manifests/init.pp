@@ -8,7 +8,7 @@ class drbd(
   $service_enable = true,
   $package_name = 'drbd8-utils',
 ) {
-  include ::drbd::service
+  include drbd::service
 
   package { 'drbd':
     ensure => present,
