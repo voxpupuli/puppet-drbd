@@ -50,7 +50,7 @@ define drbd::resource (
   $mkfs_opts       = '',
   $disk            = undef,
 ) {
-  include ::drbd
+  include drbd
 
   Exec {
     path      => ['/bin', '/sbin', '/usr/bin'],
