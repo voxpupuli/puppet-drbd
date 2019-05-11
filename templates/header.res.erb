@@ -34,6 +34,7 @@ resource <%= @name %> {
 <% end -%>
   }
 
+<% if @verify_alg or @rate-%>
   syncer {
 <% if @verify_alg -%>
     verify-alg <%= @verify_alg %>;
@@ -42,6 +43,7 @@ resource <%= @name %> {
     rate <%= @rate %>;
 <% end -%>
   }
+<% end -%>
 <% if @disk_parameters -%>
 
   disk {
