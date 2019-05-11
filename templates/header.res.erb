@@ -4,6 +4,22 @@ resource <%= @name %> {
   device    <%= @device %>;
   disk      <%= @disk %>;
   meta-disk <%= @metadisk %>;
+<% if @handlers_parameters -%>
+
+  handlers {
+<% @handlers_parameters.sort_by {|k, v| k}.each do |k, v| -%>
+    <%= k %> <%= v %>;
+<% end -%>
+  }
+<% end -%>
+<% if @startup_parameters -%>
+
+  startup {
+<% @startup_parameters.sort_by {|k, v| k}.each do |k, v| -%>
+    <%= k %> <%= v %>;
+<% end -%>
+  }
+<% end -%>
 
   net {
     cram-hmac-alg sha1;
