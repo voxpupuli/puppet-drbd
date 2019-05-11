@@ -27,6 +27,8 @@
 #  [ha_primary] If the resource is being applied on the primary host.
 #  [initial_setup] If this run is associated with the initial setup. Allows a user
 #    to only perform dangerous setup on the initial run.
+#  [initialize] If the actual drbd resource should be initialized
+#  [up] If the actual drbd resource should be set 'up' (drbdadmin up)
 define drbd::resource (
   $host1                = undef,
   $host2                = undef,
@@ -52,6 +54,8 @@ define drbd::resource (
   $manage               = true,
   $ha_primary           = false,
   $initial_setup        = false,
+  $initialize           = true,
+  $up                   = true,
   $fs_type              = 'ext4',
   $mkfs_opts            = '',
   $disk                 = undef,
@@ -167,6 +171,8 @@ define drbd::resource (
     device        => $device,
     ha_primary    => $ha_primary,
     initial_setup => $initial_setup,
+    initialize    => $initialize,
+    up            => $up,
     cluster       => $_cluster,
     mountpoint    => $mountpoint,
     automount     => $automount,

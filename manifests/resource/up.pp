@@ -2,6 +2,8 @@ define drbd::resource::up (
   $disk,
   $ha_primary,
   $initial_setup,
+  $initialize,
+  $up,
   $fs_type,
   $mkfs_opts,
   $device,
@@ -11,27 +13,31 @@ define drbd::resource::up (
   # create metadata on device, except if resource seems already initalized.
   # drbd is very tenacious about asking for aproval if there is data on the
   # volume already.
-  exec { "initialize DRBD metadata for ${name}":
-    command => "yes yes | drbdadm create-md ${name}",
-    onlyif  => "test -e ${disk}",
-    unless  => "drbdadm dump-md ${name} || (drbdadm cstate ${name} | egrep -q '^(Sync|Connected|WFConnection|StandAlone|Verify)')",
-    before  => Service['drbd'],
-    require => [
-      Exec['modprobe drbd'],
-      Concat["/etc/drbd.d/${name}.res"],
-      ],
-    notify  => Service['drbd'],
+  if $initialize {
+    exec { "initialize DRBD metadata for ${name}":
+      command => "yes yes | drbdadm create-md ${name}",
+      onlyif  => "test -e ${disk}",
+      unless  => "drbdadm dump-md ${name} || (drbdadm cstate ${name} | egrep -q '^(Sync|Connected|WFConnection|StandAlone|Verify)')",
+      before  => Service['drbd'],
+      require => [
+        Exec['modprobe drbd'],
+        Concat["/etc/drbd.d/${name}.res"],
+        ],
+      notify  => Service['drbd'],
+    }
   }
 
-  exec { "enable DRBD resource ${name}":
-    command => "drbdadm up ${name}",
-    onlyif  => "drbdadm dstate ${name} | egrep -q '^(Diskless/|Unconfigured|Consistent)'",
-    before  => Service['drbd'],
-    require => [
-      Exec["initialize DRBD metadata for ${name}"],
-      Exec['modprobe drbd']
-      ],
-    notify  => Service['drbd'],
+  if $up {
+    exec { "enable DRBD resource ${name}":
+      command => "drbdadm up ${name}",
+      onlyif  => "drbdadm dstate ${name} | egrep -q '^(Diskless/|Unconfigured|Consistent)'",
+      before  => Service['drbd'],
+      require => [
+        Exec["initialize DRBD metadata for ${name}"],
+        Exec['modprobe drbd']
+        ],
+      notify  => Service['drbd'],
+    }
   }
 
 
