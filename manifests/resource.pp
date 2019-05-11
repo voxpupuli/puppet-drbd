@@ -10,6 +10,8 @@
 #  [res2] Second stacked resource name.
 #  [disk] Name of disk to be replicated. Assumes that the
 #     name of the disk will be the same on both hosts. Required.
+#  [metadisk] Name of the metadisk. Allows to use an external metadisk. Assumes
+#     that the name of the metadisk will be the same on both hosts. Defaults to internal
 #  [secret] The shared secret used in peer authentication.. False indicates that
 #    no secret be required. Optional. Defaults to false.
 #  [port] Port which drbd will use for replication on both hosts.
@@ -49,6 +51,7 @@ define drbd::resource (
   $fs_type         = 'ext4',
   $mkfs_opts       = '',
   $disk            = undef,
+  $metadisk       = 'internal',
 ) {
   include ::drbd
 
@@ -82,6 +85,7 @@ define drbd::resource (
   # - $protocol
   # - $device
   # - $disk
+  # - $metadisk
   # - $secret
   # - $verify_alg
   # - $host1
