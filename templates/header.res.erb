@@ -3,7 +3,8 @@ resource <%= @name %> {
   protocol  <%= @protocol %>;
   device    <%= @device %>;
   disk      <%= @disk %>;
-  meta-disk <%= @metadisk %>;
+  flexible-meta-disk <%= @metadisk %>;
+
 <% if @handlers_parameters -%>
 
   handlers {
