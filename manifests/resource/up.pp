@@ -18,7 +18,10 @@ define drbd::resource::up (
       command => "yes yes | drbdadm create-md ${name}",
       onlyif  => "test -e ${disk}",
       unless  => "drbdadm dump-md ${name} || (drbdadm cstate ${name} | egrep -q '^(Sync|Connected|WFConnection|StandAlone|Verify)')",
-      before  => Service['drbd'],
+      before  => [
+        Service['drbd'],
+        Exec["initialize DRBD metadata for ${name}"],
+      ],
       require => [
         Exec['modprobe drbd'],
         Concat["/etc/drbd.d/${name}.res"],
@@ -32,10 +35,7 @@ define drbd::resource::up (
       command => "drbdadm up ${name}",
       onlyif  => "drbdadm dstate ${name} | egrep -q '^(Diskless/|Unconfigured|Consistent)'",
       before  => Service['drbd'],
-      require => [
-        Exec["initialize DRBD metadata for ${name}"],
-        Exec['modprobe drbd']
-        ],
+      require => Exec['modprobe drbd'],
       notify  => Service['drbd'],
     }
   }
