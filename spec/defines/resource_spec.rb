@@ -23,43 +23,41 @@ describe 'drbd::resource', type: :define do
         default_params
       end
 
-      it { should contain_concat__fragment('mock_drbd_resource drbd header') \
-          .with_content(/^\s*flexible-meta-disk internal;$/)
+      it {
+        is_expected.to contain_concat__fragment('mock_drbd_resource drbd header').with_content(%r{^\s*flexible-meta-disk internal;$})
       }
     end
     describe 'set external metadisk' do
       let(:params) do
         {
-          metadisk: '/dev/vg00/drbd-meta[0]',
+          metadisk: '/dev/vg00/drbd-meta[0]'
         }.merge(default_params)
       end
 
-      it do
-         should contain_concat__fragment('mock_drbd_resource drbd header') \
-          .with_content(/^\s*flexible-meta-disk \/dev\/vg00\/drbd-meta\[0\];$/)
-      end
+      it {
+        is_expected.to contain_concat__fragment('mock_drbd_resource drbd header').with_content(%r{^\s*flexible-meta-disk \/dev\/vg00\/drbd-meta\[0\];$})
+      }
     end
-
   end
 
   context 'initialization of DRBD metadata' do
     describe 'with initialize::false' do
       let :params do
         {
-          initialize: false,
+          initialize: false
         }.merge(default_params)
       end
 
-      it { should_not contain_exec('initialize DRBD metadata for mock_drbd_resource') }
+      it { is_expected.not_to contain_exec('initialize DRBD metadata for mock_drbd_resource') }
     end
     describe 'with initialize::true' do
       let :params do
         {
-          initialize: true,
+          initialize: true
         }.merge(default_params)
       end
 
-      it { should contain_exec('initialize DRBD metadata for mock_drbd_resource') }
+      it { is_expected.to contain_exec('initialize DRBD metadata for mock_drbd_resource') }
     end
   end
 
@@ -69,25 +67,23 @@ describe 'drbd::resource', type: :define do
         default_params
       end
 
-      it do
-         should contain_concat__fragment('mock_drbd_resource drbd header') \
-          .without_content(/^\s*handlers {$/)
-      end
+      it {
+        is_expected.to contain_concat__fragment('mock_drbd_resource drbd header').without_content(%r{^\s*handlers \{$})
+      }
     end
     describe 'with a set value' do
       let :params do
         {
           'handlers_parameters' =>
             {
-              'split-brain' => '"/usr/lib/drbd/notify-split-brain.sh"',
+              'split-brain' => '"/usr/lib/drbd/notify-split-brain.sh"'
             }
         }.merge(default_params)
       end
 
-      it do
-         should contain_concat__fragment('mock_drbd_resource drbd header') \
-           .with_content(/^\s*handlers {\n\s*split-brain "\/usr\/lib\/drbd\/notify-split-brain.sh";$/)
-      end
+      it {
+        is_expected.to contain_concat__fragment('mock_drbd_resource drbd header').with_content(%r{^\s*handlers \{\n\s*split-brain "\/usr\/lib\/drbd\/notify-split-brain.sh";$})
+      }
     end
   end
 
@@ -97,25 +93,23 @@ describe 'drbd::resource', type: :define do
         default_params
       end
 
-      it do
-         should contain_concat__fragment('mock_drbd_resource drbd header') \
-          .without_content(/^\s*startup {$/)
-      end
+      it {
+        is_expected.to contain_concat__fragment('mock_drbd_resource drbd header').without_content(%r{^\s*startup \{$})
+      }
     end
     describe 'with a set value' do
       let :params do
         {
           'startup_parameters' =>
             {
-              'wfc-timeout' => 0,
+              'wfc-timeout' => 0
             }
         }.merge(default_params)
       end
 
-      it do
-         should contain_concat__fragment('mock_drbd_resource drbd header') \
-           .with_content(/^\s*startup {\n\s*wfc-timeout 0;$/)
-      end
+      it {
+        is_expected.to contain_concat__fragment('mock_drbd_resource drbd header').with_content(%r{^\s*startup \{\n\s*wfc-timeout 0;$})
+      }
     end
   end
   context 'syncer config: verify_alg and rate' do
@@ -124,24 +118,24 @@ describe 'drbd::resource', type: :define do
         default_params
       end
 
-      it { should contain_concat__fragment('mock_drbd_resource drbd header') \
-        .with_content(/^\s*syncer {\n\s*verify-alg crc32c;$/)
+      it {
+        is_expected.to contain_concat__fragment('mock_drbd_resource drbd header').with_content(%r{^\s*syncer \{\n\s*verify-alg crc32c;$})
       }
-      it { should contain_concat__fragment('mock_drbd_resource drbd header') \
-        .without_content(/^\s*rate.*;$/)
+      it {
+        is_expected.to contain_concat__fragment('mock_drbd_resource drbd header').without_content(%r{^\s*rate.*;$})
       }
     end
     describe 'with rate of 1M' do
       let :params do
         {
-          rate: '1M',
+          rate: '1M'
         }.merge(default_params)
       end
 
-      it { should contain_concat__fragment('mock_drbd_resource drbd header') \
-        .with_content(/^\s*syncer {\n.*\s*rate 1M;$/)
+      it {
+        is_expected.to contain_concat__fragment('mock_drbd_resource drbd header').with_content(%r{^\s*syncer \{\n.*\s*rate 1M;$})
       }
     end
   end
 end
-#it { pp catalogue.resources }
+# it { pp catalogue.resources }
