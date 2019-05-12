@@ -18,7 +18,7 @@ describe 'drbd::resource', type: :define do
   end
 
   context 'DRBD metadisk' do
-    describe "defaults to internal" do
+    describe 'defaults to internalr' do
       let(:params) do
         default_params
       end
@@ -27,7 +27,7 @@ describe 'drbd::resource', type: :define do
           .with_content(/^\s*flexible-meta-disk internal;$/)
       }
     end
-    describe "set external metadisk" do
+    describe 'set external metadisk' do
       let(:params) do
         {
           metadisk: '/dev/vg00/drbd-meta[0]',
@@ -43,7 +43,7 @@ describe 'drbd::resource', type: :define do
   end
 
   context 'initialization of DRBD metadata' do
-    describe "with initialize::false" do
+    describe 'with initialize::false' do
       let :params do
         {
           initialize: false,
@@ -52,7 +52,7 @@ describe 'drbd::resource', type: :define do
 
       it { should_not contain_exec('initialize DRBD metadata for mock_drbd_resource') }
     end
-    describe "with initialize::true" do
+    describe 'with initialize::true' do
       let :params do
         {
           initialize: true,
@@ -64,7 +64,7 @@ describe 'drbd::resource', type: :define do
   end
 
   context 'handlers_parameters' do
-    describe "with no handlers" do
+    describe 'with no handlers' do
       let(:params) do
         default_params
       end
@@ -74,7 +74,7 @@ describe 'drbd::resource', type: :define do
           .without_content(/^\s*handlers {$/)
       end
     end
-    describe "with a set value" do
+    describe 'with a set value' do
       let :params do
         {
           'handlers_parameters' =>
@@ -92,7 +92,7 @@ describe 'drbd::resource', type: :define do
   end
 
   context 'startup_parameters' do
-    describe "with no startup" do
+    describe 'with no startup' do
       let(:params) do
         default_params
       end
@@ -102,7 +102,7 @@ describe 'drbd::resource', type: :define do
           .without_content(/^\s*startup {$/)
       end
     end
-    describe "with a set value" do
+    describe 'with a set value' do
       let :params do
         {
           'startup_parameters' =>
@@ -119,7 +119,7 @@ describe 'drbd::resource', type: :define do
     end
   end
   context 'syncer config: verify_alg and rate' do
-    describe "with default values" do
+    describe 'with default values' do
       let(:params) do
         default_params
       end
@@ -131,7 +131,7 @@ describe 'drbd::resource', type: :define do
         .without_content(/^\s*rate.*;$/)
       }
     end
-    describe "with rate of 1M" do
+    describe 'with rate of 1M' do
       let :params do
         {
           rate: '1M',
