@@ -5,9 +5,9 @@
 # by an example created by Rackspace's cloudbuilders
 #
 class drbd(
-  $service_enable = true,
-  $service_ensure = running,
-  $package_name = 'drbd8-utils',
+  $service_enable                                         = true,
+  Enum['running', 'stopped', 'unmanaged'] $service_ensure = running,
+  $package_name                                           = 'drbd8-utils',
 ) {
   include drbd::service
 
