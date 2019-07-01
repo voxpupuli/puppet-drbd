@@ -5,7 +5,7 @@ resource <%= @name %> {
   disk      <%= @disk %>;
   flexible-meta-disk <%= @metadisk %>;
 
-<% if @handlers_parameters -%>
+<% unless @handlers_parameters.empty?  -%>
 
   handlers {
 <% @handlers_parameters.sort_by {|k, v| k}.each do |k, v| -%>
@@ -13,7 +13,7 @@ resource <%= @name %> {
 <% end -%>
   }
 <% end -%>
-<% if @startup_parameters -%>
+<% unless @startup_parameters.empty? -%>
 
   startup {
 <% @startup_parameters.sort_by {|k, v| k}.each do |k, v| -%>
