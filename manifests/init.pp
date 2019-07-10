@@ -6,7 +6,7 @@
 #
 class drbd(
   $service_enable = true,
-  $package_name = 'drbd8-utils',
+  $package_name = 'drbd-utils',
 ) {
   include drbd::service
 
