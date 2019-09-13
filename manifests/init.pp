@@ -6,6 +6,7 @@
 #
 class drbd(
   $service_enable = true,
+  $manage_confdir = true,
   $package_name = 'drbd8-utils',
 ) {
   include drbd::service
@@ -46,7 +47,7 @@ class drbd(
   file { '/etc/drbd.d':
     ensure  => directory,
     mode    => '0644',
-    purge   => true,
+    purge   => $manage_confdir,
     recurse => true,
     force   => true,
     require => Package['drbd'],
