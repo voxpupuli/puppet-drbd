@@ -18,6 +18,14 @@ resource <%= @name %> {
 <% end -%>
   }
 
+  startup {
+<% if @startup_parameters -%>
+  <% @startup_parameters.sort_by {|k, v| k}.each do |k, v| -%>
+    <%= k %> <%= v %>;
+  <% end -%>
+<% end -%>
+  }
+
   syncer {
     verify-alg <%= @verify_alg %>;
 <% if @rate -%>

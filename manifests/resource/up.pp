@@ -14,7 +14,7 @@ define drbd::resource::up (
   exec { "initialize DRBD metadata for ${name}":
     command => "yes yes | drbdadm create-md ${name}",
     onlyif  => "test -e ${disk}",
-    unless  => "drbdadm dump-md ${name} || (drbdadm cstate ${name} | egrep -q '^(Sync|Connected|WFConnection|StandAlone|Verify)')",
+    unless  => "drbdadm dump-md ${name} || (drbdadm cstate ${name} | egrep -q '^(Sync|Connected|Connecting|WFConnection|StandAlone|Verify)')",
     before  => Service['drbd'],
     require => [
       Exec['modprobe drbd'],
@@ -41,7 +41,7 @@ define drbd::resource::up (
     # these things should only be done on the primary during initial setup
     if $initial_setup {
       exec { "drbd_make_primary_${name}":
-        command => "drbdadm -- --overwrite-data-of-peer primary ${name}",
+        command => "drbdadm -- --overwrite-data-of-peer --force primary ${name}",
         unless  => "drbdadm role ${name} | egrep '^Primary'",
         onlyif  => "drbdadm dstate ${name} | egrep '^Inconsistent'",
         notify  => Exec["drbd_format_volume_${name}"],
