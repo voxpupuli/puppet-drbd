@@ -10,6 +10,8 @@
 #  [res2] Second stacked resource name.
 #  [disk] Name of disk to be replicated. Assumes that the
 #     name of the disk will be the same on both hosts. Required.
+#  [metadisk] Name of the metadisk. Allows to use an external metadisk. Assumes
+#     that the name of the metadisk will be the same on both hosts. Defaults to internal
 #  [secret] The shared secret used in peer authentication.. False indicates that
 #    no secret be required. Optional. Defaults to false.
 #  [port] Port which drbd will use for replication on both hosts.
@@ -19,36 +21,45 @@
 #  [verify_alg] Algorithm used for block validation on peers. Optional.
 #    Defaults to crc32c. Accepts crc32c, sha1, or md5.
 #  [disk_parameters] Parameters for disk{} section
+#  [handlers_parameters] Parameters for handlers{} section
+#  [startup_parameters] Parameters for startup{} section
 #  [manage] If the actual drbd resource shoudl be managed.
 #  [ha_primary] If the resource is being applied on the primary host.
 #  [initial_setup] If this run is associated with the initial setup. Allows a user
 #    to only perform dangerous setup on the initial run.
+#  [initialize] If the actual drbd resource should be initialized
+#  [up] If the actual drbd resource should be set 'up' (drbdadmin up)
 define drbd::resource (
-  $host1           = undef,
-  $host2           = undef,
-  $ip1             = undef,
-  $ip2             = undef,
-  $res1            = undef,
-  $res2            = undef,
-  $cluster         = undef,
-  $secret          = false,
-  $port            = '7789',
-  $device          = '/dev/drbd0',
-  $mountpoint      = "/drbd/${name}",
-  $automount       = true,
-  $owner           = 'root',
-  $group           = 'root',
-  $protocol        = 'C',
-  $verify_alg      = 'crc32c',
-  $rate            = false,
-  $disk_parameters = false,
-  $net_parameters  = false,
-  $manage          = true,
-  $ha_primary      = false,
-  $initial_setup   = false,
-  $fs_type         = 'ext4',
-  $mkfs_opts       = '',
-  $disk            = undef,
+  $host1                                                      = undef,
+  $host2                                                      = undef,
+  $ip1                                                        = undef,
+  $ip2                                                        = undef,
+  $res1                                                       = undef,
+  $res2                                                       = undef,
+  $cluster                                                    = undef,
+  $secret                                                     = false,
+  $port                                                       = '7789',
+  $device                                                     = '/dev/drbd0',
+  $mountpoint                                                 = "/drbd/${name}",
+  $automount                                                  = true,
+  $owner                                                      = 'root',
+  $group                                                      = 'root',
+  $protocol                                                   = 'C',
+  $verify_alg                                                 = 'crc32c',
+  $rate                                                       = false,
+  $disk_parameters                                            = false,
+  $net_parameters                                             = false,
+  Hash[String, Variant[Integer,String]] $handlers_parameters  = {},
+  Hash[String, Variant[Integer,String]] $startup_parameters   = {},
+  $manage                                                     = true,
+  $ha_primary                                                 = false,
+  $initial_setup                                              = false,
+  Boolean $initialize                                         = true,
+  Boolean $up                                                 = true,
+  $fs_type                                                    = 'ext4',
+  $mkfs_opts                                                  = '',
+  $disk                                                       = undef,
+  String[1] $metadisk                                         = 'internal',
 ) {
   include drbd
 
@@ -82,6 +93,7 @@ define drbd::resource (
   # - $protocol
   # - $device
   # - $disk
+  # - $metadisk
   # - $secret
   # - $verify_alg
   # - $host1
@@ -159,6 +171,8 @@ define drbd::resource (
     device        => $device,
     ha_primary    => $ha_primary,
     initial_setup => $initial_setup,
+    initialize    => $initialize,
+    up            => $up,
     cluster       => $_cluster,
     mountpoint    => $mountpoint,
     automount     => $automount,
