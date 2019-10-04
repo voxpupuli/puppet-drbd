@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe 'drbd', type: :class do
-
   shared_examples 'drbd shared example' do
     it { is_expected.to compile.with_all_deps }
 
@@ -20,15 +19,15 @@ describe 'drbd', type: :class do
     context "on #{os}" do
       let(:facts) { os_facts }
 
-        it_behaves_like 'drbd shared example'
+      it_behaves_like 'drbd shared example'
 
-        it do
-          if (facts[:osfamily] == 'Debian')
-            is_expected.to contain_package('drbd').with_name('drbd-utils')
-          else
-            is_expected.to contain_package('drbd').with_name('drbd8-utils')
-          end
+      it do
+        if facts[:osfamily] == 'Debian'
+          is_expected.to contain_package('drbd').with_name('drbd-utils')
+        else
+          is_expected.to contain_package('drbd').with_name('drbd8-utils')
         end
+      end
     end
   end
 end
