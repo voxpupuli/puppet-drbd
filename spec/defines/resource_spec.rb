@@ -13,7 +13,7 @@ describe 'drbd::resource', type: :define do
       host2: 'mock_secondary',
       ip1: '10.16.0.1',
       ip2: '10.16.0.2',
-      ha_primary: false,
+      ha_primary: false
     }
   end
 
@@ -23,26 +23,26 @@ describe 'drbd::resource', type: :define do
 
       it { is_expected.to contain_class('drbd') }
       it {
-        is_expected.to contain_file('/drbd/' + title)
-          .with_ensure('directory')
-          .with_mode('0755')
-          .with_owner('root')
-          .with_group('root')
+        is_expected.to contain_file('/drbd/' + title).
+          with_ensure('directory').
+          with_mode('0755').
+          with_owner('root').
+          with_group('root')
       }
       it {
-        is_expected.to contain_concat('/etc/drbd.d/' + title + '.res')
-          .with_mode('0600')
+        is_expected.to contain_concat('/etc/drbd.d/' + title + '.res').
+          with_mode('0600')
       }
       it {
-        is_expected.to contain_concat__fragment(title + ' drbd header')
-          .with_target('/etc/drbd.d/' + title + '.res')
-          .with_order('01')
+        is_expected.to contain_concat__fragment(title + ' drbd header').
+          with_target('/etc/drbd.d/' + title + '.res').
+          with_order('01')
       }
       it {
-        is_expected.to contain_concat__fragment(title + ' drbd footer')
-          .with_target('/etc/drbd.d/' + title + '.res')
-          .with_content("}\n")
-          .with_order('99')
+        is_expected.to contain_concat__fragment(title + ' drbd footer').
+          with_target('/etc/drbd.d/' + title + '.res').
+          with_content("}\n").
+          with_order('99')
       }
       it {
         is_expected.to contain_drbd__resource__enable(title)
@@ -65,7 +65,7 @@ describe 'drbd::resource', type: :define do
     describe 'set external metadisk' do
       let(:params) do
         {
-          metadisk: '/dev/vg00/drbd-meta[0]',
+          metadisk: '/dev/vg00/drbd-meta[0]'
         }.merge(default_params)
       end
 
@@ -81,7 +81,7 @@ describe 'drbd::resource', type: :define do
     describe 'with initialize::false' do
       let :params do
         {
-          initialize: false,
+          initialize: false
         }.merge(default_params)
       end
 
@@ -92,7 +92,7 @@ describe 'drbd::resource', type: :define do
     describe 'with initialize::true' do
       let :params do
         {
-          initialize: true,
+          initialize: true
         }.merge(default_params)
       end
 
@@ -119,8 +119,8 @@ describe 'drbd::resource', type: :define do
         {
           'handlers_parameters' =>
             {
-              'split-brain' => '"/usr/lib/drbd/notify-split-brain.sh"',
-            },
+              'split-brain' => '"/usr/lib/drbd/notify-split-brain.sh"'
+            }
         }.merge(default_params)
       end
 
@@ -149,8 +149,8 @@ describe 'drbd::resource', type: :define do
         {
           'startup_parameters' =>
             {
-              'wfc-timeout' => 0,
-            },
+              'wfc-timeout' => 0
+            }
         }.merge(default_params)
       end
 
@@ -179,7 +179,7 @@ describe 'drbd::resource', type: :define do
     describe 'with rate of 1M' do
       let :params do
         {
-          rate: '1M',
+          rate: '1M'
         }.merge(default_params)
       end
 
