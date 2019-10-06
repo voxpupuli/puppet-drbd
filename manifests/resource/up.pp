@@ -20,7 +20,6 @@ define drbd::resource::up (
       unless  => "drbdadm dump-md ${name} || (drbdadm cstate ${name} | egrep -q '^(Sync|Connected|WFConnection|StandAlone|Verify)')",
       before  => [
         Service['drbd'],
-        Exec["initialize DRBD metadata for ${name}"],
       ],
       require => [
         Exec['modprobe drbd'],
