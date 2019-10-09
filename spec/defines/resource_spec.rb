@@ -51,7 +51,7 @@ describe 'drbd::resource', type: :define do
   end
 
   context 'DRBD metadisk' do
-    describe 'defaults to internalr' do
+    describe 'defaults to internal' do
       let(:params) do
         default_params
       end
@@ -59,13 +59,13 @@ describe 'drbd::resource', type: :define do
       it_behaves_like 'drbd::resource generic example'
 
       it {
-        is_expected.to contain_concat__fragment('mock_drbd_resource drbd header').with_content(%r{^\s*flexible-meta-disk internal;$})
+        is_expected.to contain_concat__fragment('mock_drbd_resource drbd header').with_content(%r{^\s*meta-disk internal;$})
       }
     end
-    describe 'set external metadisk' do
+    describe 'set external flexible metadisk' do
       let(:params) do
         {
-          metadisk: '/dev/vg00/drbd-meta[0]'
+          flexible_metadisk: '/dev/vg00/drbd-meta[0]'
         }.merge(default_params)
       end
 
