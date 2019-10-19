@@ -63,7 +63,7 @@ define drbd::resource (
   $mkfs_opts                                                  = '',
   $disk                                                       = undef,
   String[1] $metadisk                                         = 'internal',
-  Optional[String] $flexible_metadisk                         = undef,
+  Optional[String[1]] $flexible_metadisk                      = undef,
 ) {
   include drbd
 
