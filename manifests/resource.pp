@@ -12,6 +12,9 @@
 #     name of the disk will be the same on both hosts. Required.
 #  [metadisk] Name of the metadisk. Allows to use an external metadisk. Assumes
 #     that the name of the metadisk will be the same on both hosts. Defaults to internal
+#     this parameter is ignored if flexible_metadisk is defined
+#  [flexible_metadisk] Name of the flexible_metadisk
+#     defaults to undef. If defined, the metadisk parameter is superseeded
 #  [secret] The shared secret used in peer authentication.. False indicates that
 #    no secret be required. Optional. Defaults to false.
 #  [port] Port which drbd will use for replication on both hosts.
@@ -60,6 +63,7 @@ define drbd::resource (
   $mkfs_opts                                                  = '',
   $disk                                                       = undef,
   String[1] $metadisk                                         = 'internal',
+  Optional[String[1]] $flexible_metadisk                      = undef,
 ) {
   include drbd
 
