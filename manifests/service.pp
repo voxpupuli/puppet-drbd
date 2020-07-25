@@ -1,5 +1,4 @@
 class drbd::service {
-
   if $drbd::service_ensure == 'unmanaged' {
     $_ensure = undef
   } else {

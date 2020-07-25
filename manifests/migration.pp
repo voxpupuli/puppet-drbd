@@ -3,7 +3,6 @@ define drbd::migration (
   $service,
   $volume
 ) {
-
   Exec {
     path => ['/sbin', '/bin', '/usr/sbin', '/usr/bin'],
   }
@@ -29,7 +28,6 @@ define drbd::migration (
       refreshonly => true,
       subscribe   => File[$name],
     }
-
   } else {
     exec { "remove ${service} data on secondary node":
       command     => "rm -r ${name}",

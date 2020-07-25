@@ -4,7 +4,7 @@
 # It has been influenced by the camptocamp module as well as
 # by an example created by Rackspace's cloudbuilders
 #
-class drbd(
+class drbd (
   Boolean                                 $service_enable = true,
   Enum['running', 'stopped', 'unmanaged'] $service_ensure = running,
   String                                  $package_name   = 'drbd8-utils',
@@ -52,5 +52,4 @@ class drbd(
     force   => true,
     require => Package['drbd'],
   }
-
 }
