@@ -24,7 +24,7 @@ define drbd::resource::up (
       require => [
         Exec['modprobe drbd'],
         Concat["/etc/drbd.d/${name}.res"],
-        ],
+      ],
       notify  => Service['drbd'],
     }
   }
@@ -38,7 +38,6 @@ define drbd::resource::up (
       notify  => Service['drbd'],
     }
   }
-
 
   # these resources should only be applied if we are configuring the
   # primary node in our HA setup
