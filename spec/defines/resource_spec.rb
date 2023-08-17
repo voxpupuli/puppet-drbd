@@ -22,6 +22,7 @@ describe 'drbd::resource', type: :define do
       it { is_expected.to compile.with_all_deps }
 
       it { is_expected.to contain_class('drbd') }
+
       it {
         is_expected.to contain_file('/drbd/' + title).
           with_ensure('directory').
@@ -29,21 +30,25 @@ describe 'drbd::resource', type: :define do
           with_owner('root').
           with_group('root')
       }
+
       it {
         is_expected.to contain_concat('/etc/drbd.d/' + title + '.res').
           with_mode('0600')
       }
+
       it {
         is_expected.to contain_concat__fragment(title + ' drbd header').
           with_target('/etc/drbd.d/' + title + '.res').
           with_order('01')
       }
+
       it {
         is_expected.to contain_concat__fragment(title + ' drbd footer').
           with_target('/etc/drbd.d/' + title + '.res').
           with_content("}\n").
           with_order('99')
       }
+
       it {
         is_expected.to contain_drbd__resource__enable(title)
       }
@@ -62,6 +67,7 @@ describe 'drbd::resource', type: :define do
         is_expected.to contain_concat__fragment('mock_drbd_resource drbd header').with_content(%r{^\s*meta-disk internal;$})
       }
     end
+
     describe 'set external flexible metadisk' do
       let(:params) do
         {
@@ -72,7 +78,7 @@ describe 'drbd::resource', type: :define do
       it_behaves_like 'drbd::resource generic example'
 
       it {
-        is_expected.to contain_concat__fragment('mock_drbd_resource drbd header').with_content(%r{^\s*flexible-meta-disk \/dev\/vg00\/drbd-meta\[0\];$})
+        is_expected.to contain_concat__fragment('mock_drbd_resource drbd header').with_content(%r{^\s*flexible-meta-disk /dev/vg00/drbd-meta\[0\];$})
       }
     end
   end
@@ -89,6 +95,7 @@ describe 'drbd::resource', type: :define do
 
       it { is_expected.not_to contain_exec('initialize DRBD metadata for mock_drbd_resource') }
     end
+
     describe 'with initialize::true' do
       let :params do
         {
@@ -114,6 +121,7 @@ describe 'drbd::resource', type: :define do
         is_expected.to contain_concat__fragment('mock_drbd_resource drbd header').without_content(%r{^\s*handlers \{$})
       }
     end
+
     describe 'with a set value' do
       let :params do
         {
@@ -127,7 +135,7 @@ describe 'drbd::resource', type: :define do
       it_behaves_like 'drbd::resource generic example'
 
       it {
-        is_expected.to contain_concat__fragment('mock_drbd_resource drbd header').with_content(%r{^\s*handlers \{\n\s*split-brain "\/usr\/lib\/drbd\/notify-split-brain.sh";$})
+        is_expected.to contain_concat__fragment('mock_drbd_resource drbd header').with_content(%r{^\s*handlers \{\n\s*split-brain "/usr/lib/drbd/notify-split-brain.sh";$})
       }
     end
   end
@@ -144,6 +152,7 @@ describe 'drbd::resource', type: :define do
         is_expected.to contain_concat__fragment('mock_drbd_resource drbd header').without_content(%r{^\s*startup \{$})
       }
     end
+
     describe 'with a set value' do
       let :params do
         {
@@ -161,6 +170,7 @@ describe 'drbd::resource', type: :define do
       }
     end
   end
+
   context 'syncer config: verify_alg and rate' do
     describe 'with default values' do
       let(:params) do
@@ -172,10 +182,12 @@ describe 'drbd::resource', type: :define do
       it {
         is_expected.to contain_concat__fragment('mock_drbd_resource drbd header').with_content(%r{^\s*syncer \{\n\s*verify-alg crc32c;$})
       }
+
       it {
         is_expected.to contain_concat__fragment('mock_drbd_resource drbd header').without_content(%r{^\s*rate.*;$})
       }
     end
+
     describe 'with rate of 1M' do
       let :params do
         {
