@@ -50,11 +50,7 @@ The `drbd::resource` is used to configure indiviual resources.
 
 ## Limitations
 
-This module is tested on the following platforms:
-
-* Debian 7
-* Ubuntu 10.04/12.04/14.04
-* RedHat 6/7
+Please have a look into the [metadata.json](metadata.json) for all supported operating systems.
 
 ## Contributing
 
