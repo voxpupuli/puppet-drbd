@@ -23,7 +23,7 @@ describe 'drbd', type: :class do
       it_behaves_like 'drbd shared example'
 
       it do
-        if facts[:osfamily] == 'Debian'
+        if facts[:os]['family'] == 'Debian'
           is_expected.to contain_package('drbd').with_name('drbd-utils')
         else
           is_expected.to contain_package('drbd').with_name('drbd8-utils')
