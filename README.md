@@ -40,13 +40,7 @@ The `drbd::resource` is used to configure indiviual resources.
 
 ## Reference
 
-### Classes
-
-#### Public Classes
-
-#### Private Classes
-
-### Parameters
+See [Reference](REFERENCE.md).
 
 ## Limitations
 
