@@ -27,6 +27,14 @@
         "9",
         "10"
       ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "20.04",
+        "22.04",
+        "24.04"
+      ]
     }
   ],
   "dependencies": [
