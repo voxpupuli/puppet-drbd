@@ -48,4 +48,4 @@ Please have a look into the [metadata.json](metadata.json) for all supported ope
 
 ## Contributing
 
-Please read CONTRIBUTING.md for full details on contributing to this project.
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for full details on contributing to this project.
