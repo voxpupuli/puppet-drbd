@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'drbd::resource', type: :define do
@@ -24,7 +26,7 @@ describe 'drbd::resource', type: :define do
       it { is_expected.to contain_class('drbd') }
 
       it {
-        is_expected.to contain_file('/drbd/' + title).
+        is_expected.to contain_file("/drbd/#{title}").
           with_ensure('directory').
           with_mode('0755').
           with_owner('root').
@@ -32,19 +34,19 @@ describe 'drbd::resource', type: :define do
       }
 
       it {
-        is_expected.to contain_concat('/etc/drbd.d/' + title + '.res').
+        is_expected.to contain_concat("/etc/drbd.d/#{title}.res").
           with_mode('0600')
       }
 
       it {
-        is_expected.to contain_concat__fragment(title + ' drbd header').
-          with_target('/etc/drbd.d/' + title + '.res').
+        is_expected.to contain_concat__fragment("#{title} drbd header").
+          with_target("/etc/drbd.d/#{title}.res").
           with_order('01')
       }
 
       it {
-        is_expected.to contain_concat__fragment(title + ' drbd footer').
-          with_target('/etc/drbd.d/' + title + '.res').
+        is_expected.to contain_concat__fragment("#{title} drbd footer").
+          with_target("/etc/drbd.d/#{title}.res").
           with_content("}\n").
           with_order('99')
       }
