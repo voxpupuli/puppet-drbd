@@ -36,7 +36,7 @@ class drbd (
 
   # this file just includes other files
   file { '/etc/drbd.conf':
-    source  => 'puppet:///modules/drbd/drbd.conf',
+    source => 'puppet:///modules/drbd/drbd.conf',
   }
 
   file { '/etc/drbd.d/global_common.conf':
