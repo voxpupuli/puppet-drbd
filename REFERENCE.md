@@ -16,6 +16,10 @@
 * [`drbd::resource::enable`](#drbd--resource--enable)
 * [`drbd::resource::up`](#drbd--resource--up)
 
+### Data types
+
+* [`Drbd::Common_suboptions`](#Drbd--Common_suboptions): Common options type
+
 ## Classes
 
 ### <a name="drbd"></a>`drbd`
@@ -32,12 +36,15 @@ The following parameters are available in the `drbd` class:
 * [`service_enable`](#-drbd--service_enable)
 * [`service_ensure`](#-drbd--service_ensure)
 * [`package_name`](#-drbd--package_name)
+* [`global_options`](#-drbd--global_options)
+* [`common_options`](#-drbd--common_options)
+* [`common_suboptions`](#-drbd--common_suboptions)
 
 ##### <a name="-drbd--service_enable"></a>`service_enable`
 
 Data type: `Boolean`
 
-
+if service should be enabled
 
 Default value: `true`
 
@@ -45,7 +52,7 @@ Default value: `true`
 
 Data type: `Enum['running', 'stopped', 'unmanaged']`
 
-
+what we ensure for the service
 
 Default value: `running`
 
@@ -53,9 +60,33 @@ Default value: `running`
 
 Data type: `String`
 
-
+name of the drbd package to install
 
 Default value: `'drbd8-utils'`
+
+##### <a name="-drbd--global_options"></a>`global_options`
+
+Data type: `Array[String[1]]`
+
+array of global options for /etc/drbd.d/global_common.conf
+
+Default value: `['usage-count no']`
+
+##### <a name="-drbd--common_options"></a>`common_options`
+
+Data type: `Array[String[1]]`
+
+array of common options for /etc/drbd.d/global_common.conf
+
+Default value: `['protocol C']`
+
+##### <a name="-drbd--common_suboptions"></a>`common_suboptions`
+
+Data type: `Drbd::Common_suboptions`
+
+hash of suboptions for /etc/drbd.d/global_common.conf
+
+Default value: `{}`
 
 ### <a name="drbd--service"></a>`drbd::service`
 
@@ -585,4 +616,22 @@ Data type: `Any`
 Data type: `Any`
 
 
+
+## Data types
+
+### <a name="Drbd--Common_suboptions"></a>`Drbd::Common_suboptions`
+
+Common options type
+
+Alias of
+
+```puppet
+Struct[{
+    handlers => Optional[Array[String[1]]],
+    startup  => Optional[Array[String[1]]],
+    options  => Optional[Array[String[1]]],
+    disk     => Optional[Array[String[1]]],
+    net      => Optional[Array[String[1]]],
+}]
+```
 
