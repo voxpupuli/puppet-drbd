@@ -7,12 +7,12 @@
 ### Classes
 
 * [`drbd`](#drbd): This class can be used to configure the drbd service.  It has been influenced by the camptocamp module as well as by an example created by Ra
-* [`drbd::service`](#drbd--service)
+* [`drbd::service`](#drbd--service): drbd service
 
 ### Defined types
 
 * [`drbd::migration`](#drbd--migration)
-* [`drbd::resource`](#drbd--resource): Used to created a resource that replicates data between 2 hosts for HA.  == Parameters  [host1] Name of first host. Required unless $cluster 
+* [`drbd::resource`](#drbd--resource): Used to created a resource that replicates data between 2 hosts for HA.
 * [`drbd::resource::enable`](#drbd--resource--enable)
 * [`drbd::resource::up`](#drbd--resource--up)
 
@@ -90,7 +90,7 @@ Default value: `{}`
 
 ### <a name="drbd--service"></a>`drbd::service`
 
-The drbd::service class.
+drbd service
 
 ## Defined types
 
@@ -129,38 +129,6 @@ Data type: `Any`
 Used to created a resource that replicates data
 between 2 hosts for HA.
 
-== Parameters
- [host1] Name of first host. Required unless $cluster is set.
- [host2] Name of second host. Required unless $cluster is set.
- [ip1] Ipaddress of first host. Required unless $cluster or $res1/$res2 is set.
- [ip2] Ipaddress of second host. Required unless $cluster or $res1/$res2 is set.
- [res1] First stacked resource name.
- [res2] Second stacked resource name.
- [disk] Name of disk to be replicated. Assumes that the
-    name of the disk will be the same on both hosts. Required.
- [metadisk] Name of the metadisk. Allows to use an external metadisk. Assumes
-    that the name of the metadisk will be the same on both hosts. Defaults to internal
-    this parameter is ignored if flexible_metadisk is defined
- [flexible_metadisk] Name of the flexible_metadisk
-    defaults to undef. If defined, the metadisk parameter is superseeded
- [secret] The shared secret used in peer authentication.. False indicates that
-   no secret be required. Optional. Defaults to false.
- [port] Port which drbd will use for replication on both hosts.
-    Optional. Defaults to 7789.
- [protocol] Protocol to use for drbd. Optional. Defaults to 'C'
-    http://www.drbd.org/users-guide/s-replication-protocols.html
- [verify_alg] Algorithm used for block validation on peers. Optional.
-   Defaults to crc32c. Accepts crc32c, sha1, or md5.
- [disk_parameters] Parameters for disk{} section
- [handlers_parameters] Parameters for handlers{} section
- [startup_parameters] Parameters for startup{} section
- [manage] If the actual drbd resource shoudl be managed.
- [ha_primary] If the resource is being applied on the primary host.
- [initial_setup] If this run is associated with the initial setup. Allows a user
-   to only perform dangerous setup on the initial run.
- [initialize] If the actual drbd resource should be initialized
- [up] If the actual drbd resource should be set 'up' (drbdadmin up)
-
 #### Parameters
 
 The following parameters are available in the `drbd::resource` defined type:
@@ -172,11 +140,14 @@ The following parameters are available in the `drbd::resource` defined type:
 * [`res1`](#-drbd--resource--res1)
 * [`res2`](#-drbd--resource--res2)
 * [`cluster`](#-drbd--resource--cluster)
+* [`disk`](#-drbd--resource--disk)
+* [`metadisk`](#-drbd--resource--metadisk)
+* [`flexible_metadisk`](#-drbd--resource--flexible_metadisk)
 * [`secret`](#-drbd--resource--secret)
 * [`port`](#-drbd--resource--port)
-* [`device`](#-drbd--resource--device)
 * [`mountpoint`](#-drbd--resource--mountpoint)
 * [`automount`](#-drbd--resource--automount)
+* [`device`](#-drbd--resource--device)
 * [`owner`](#-drbd--resource--owner)
 * [`group`](#-drbd--resource--group)
 * [`protocol`](#-drbd--resource--protocol)
@@ -193,15 +164,12 @@ The following parameters are available in the `drbd::resource` defined type:
 * [`up`](#-drbd--resource--up)
 * [`fs_type`](#-drbd--resource--fs_type)
 * [`mkfs_opts`](#-drbd--resource--mkfs_opts)
-* [`disk`](#-drbd--resource--disk)
-* [`metadisk`](#-drbd--resource--metadisk)
-* [`flexible_metadisk`](#-drbd--resource--flexible_metadisk)
 
 ##### <a name="-drbd--resource--host1"></a>`host1`
 
 Data type: `Any`
 
-
+Name of first host. Required unless $cluster is set.
 
 Default value: `undef`
 
@@ -209,7 +177,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Name of second host. Required unless $cluster is set.
 
 Default value: `undef`
 
@@ -217,7 +185,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Ipaddress of first host. Required unless $cluster or $res1/$res2 is set.
 
 Default value: `undef`
 
@@ -225,7 +193,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Ipaddress of second host. Required unless $cluster or $res1/$res2 is set.
 
 Default value: `undef`
 
@@ -233,7 +201,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+First stacked resource name.
 
 Default value: `undef`
 
@@ -241,7 +209,7 @@ Default value: `undef`
 
 Data type: `Any`
 
-
+Second stacked resource name.
 
 Default value: `undef`
 
@@ -253,11 +221,40 @@ Data type: `Any`
 
 Default value: `undef`
 
+##### <a name="-drbd--resource--disk"></a>`disk`
+
+Data type: `Any`
+
+Name of disk to be replicated. Assumes that the
+name of the disk will be the same on both hosts. Required.
+
+Default value: `undef`
+
+##### <a name="-drbd--resource--metadisk"></a>`metadisk`
+
+Data type: `String[1]`
+
+Name of the metadisk. Allows to use an external metadisk. Assumes
+that the name of the metadisk will be the same on both hosts. Defaults to internal
+this parameter is ignored if flexible_metadisk is defined
+
+Default value: `'internal'`
+
+##### <a name="-drbd--resource--flexible_metadisk"></a>`flexible_metadisk`
+
+Data type: `Optional[String[1]]`
+
+Name of the flexible_metadisk
+defaults to undef. If defined, the metadisk parameter is superseeded
+
+Default value: `undef`
+
 ##### <a name="-drbd--resource--secret"></a>`secret`
 
 Data type: `Any`
 
-
+The shared secret used in peer authentication.. False indicates that
+no secret be required. Optional. Defaults to false.
 
 Default value: `false`
 
@@ -265,17 +262,10 @@ Default value: `false`
 
 Data type: `Any`
 
-
+Port which drbd will use for replication on both hosts.
+Optional. Defaults to 7789.
 
 Default value: `'7789'`
-
-##### <a name="-drbd--resource--device"></a>`device`
-
-Data type: `Any`
-
-
-
-Default value: `'/dev/drbd0'`
 
 ##### <a name="-drbd--resource--mountpoint"></a>`mountpoint`
 
@@ -292,6 +282,14 @@ Data type: `Any`
 
 
 Default value: `true`
+
+##### <a name="-drbd--resource--device"></a>`device`
+
+Data type: `Any`
+
+
+
+Default value: `'/dev/drbd0'`
 
 ##### <a name="-drbd--resource--owner"></a>`owner`
 
@@ -313,7 +311,8 @@ Default value: `'root'`
 
 Data type: `Any`
 
-
+Protocol to use for drbd. Optional. Defaults to 'C'
+http://www.drbd.org/users-guide/s-replication-protocols.html
 
 Default value: `'C'`
 
@@ -321,7 +320,8 @@ Default value: `'C'`
 
 Data type: `Any`
 
-
+Algorithm used for block validation on peers. Optional.
+Defaults to crc32c. Accepts crc32c, sha1, or md5.
 
 Default value: `'crc32c'`
 
@@ -337,7 +337,7 @@ Default value: `false`
 
 Data type: `Any`
 
-
+Parameters for disk{} section
 
 Default value: `false`
 
@@ -353,7 +353,7 @@ Default value: `false`
 
 Data type: `Hash[String, Variant[Integer,String]]`
 
-
+Parameters for handlers{} section
 
 Default value: `{}`
 
@@ -361,7 +361,7 @@ Default value: `{}`
 
 Data type: `Hash[String, Variant[Integer,String]]`
 
-
+Parameters for startup{} section
 
 Default value: `{}`
 
@@ -369,7 +369,7 @@ Default value: `{}`
 
 Data type: `Any`
 
-
+If the actual drbd resource shoudl be managed.
 
 Default value: `true`
 
@@ -377,7 +377,7 @@ Default value: `true`
 
 Data type: `Any`
 
-
+If the resource is being applied on the primary host.
 
 Default value: `false`
 
@@ -385,7 +385,8 @@ Default value: `false`
 
 Data type: `Any`
 
-
+If this run is associated with the initial setup. Allows a user
+to only perform dangerous setup on the initial run.
 
 Default value: `false`
 
@@ -393,7 +394,7 @@ Default value: `false`
 
 Data type: `Boolean`
 
-
+If the actual drbd resource should be initialized
 
 Default value: `true`
 
@@ -401,7 +402,7 @@ Default value: `true`
 
 Data type: `Boolean`
 
-
+If the actual drbd resource should be set 'up' (drbdadmin up)
 
 Default value: `true`
 
@@ -420,30 +421,6 @@ Data type: `Any`
 
 
 Default value: `''`
-
-##### <a name="-drbd--resource--disk"></a>`disk`
-
-Data type: `Any`
-
-
-
-Default value: `undef`
-
-##### <a name="-drbd--resource--metadisk"></a>`metadisk`
-
-Data type: `String[1]`
-
-
-
-Default value: `'internal'`
-
-##### <a name="-drbd--resource--flexible_metadisk"></a>`flexible_metadisk`
-
-Data type: `Optional[String[1]]`
-
-
-
-Default value: `undef`
 
 ### <a name="drbd--resource--enable"></a>`drbd::resource::enable`
 
