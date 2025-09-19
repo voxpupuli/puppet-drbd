@@ -90,7 +90,8 @@ Default value: `{}`
 
 ### <a name="drbd--service"></a>`drbd::service`
 
-drbd service
+Create a virtual service resource
+to be realized upon needed
 
 ## Defined types
 
