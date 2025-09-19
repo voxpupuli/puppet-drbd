@@ -1,3 +1,17 @@
+#
+# @param manage
+# @param disk
+# @param fs_type
+# @param mkfs_opts
+# @param device
+# @param ha_primary
+# @param initial_setup
+# @param initialize
+# @param up
+# @param cluster
+# @param mountpoint
+# @param automount
+#
 define drbd::resource::enable (
   $manage,
   $disk,

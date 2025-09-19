@@ -1,3 +1,9 @@
+# 
+# Create a virtual service resource
+# to be realized upon needed
+#
+# @summary drbd service
+#
 class drbd::service {
   if $drbd::service_ensure == 'unmanaged' {
     $_ensure = undef

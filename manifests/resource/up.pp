@@ -1,3 +1,15 @@
+#
+# @param disk
+# @param ha_primary
+# @param initial_setup
+# @param initialize
+# @param up
+# @param fs_type
+# @param mkfs_opts
+# @param device
+# @param mountpoint
+# @param automount
+#
 define drbd::resource::up (
   $disk,
   $ha_primary,
