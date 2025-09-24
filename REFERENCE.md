@@ -632,6 +632,6 @@ Struct[{
     options  => Optional[Array[String[1]]],
     disk     => Optional[Array[String[1]]],
     net      => Optional[Array[String[1]]],
-}]
+  }]
 ```
 
