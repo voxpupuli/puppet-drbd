@@ -1,3 +1,8 @@
+# 
+# @param ha_primary
+# @param service
+# @param volume
+#
 define drbd::migration (
   $ha_primary,
   $service,

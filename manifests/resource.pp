@@ -1,37 +1,68 @@
 # Used to created a resource that replicates data
 # between 2 hosts for HA.
 #
-# == Parameters
-#  [host1] Name of first host. Required unless $cluster is set.
-#  [host2] Name of second host. Required unless $cluster is set.
-#  [ip1] Ipaddress of first host. Required unless $cluster or $res1/$res2 is set.
-#  [ip2] Ipaddress of second host. Required unless $cluster or $res1/$res2 is set.
-#  [res1] First stacked resource name.
-#  [res2] Second stacked resource name.
-#  [disk] Name of disk to be replicated. Assumes that the
-#     name of the disk will be the same on both hosts. Required.
-#  [metadisk] Name of the metadisk. Allows to use an external metadisk. Assumes
-#     that the name of the metadisk will be the same on both hosts. Defaults to internal
-#     this parameter is ignored if flexible_metadisk is defined
-#  [flexible_metadisk] Name of the flexible_metadisk
-#     defaults to undef. If defined, the metadisk parameter is superseeded
-#  [secret] The shared secret used in peer authentication.. False indicates that
-#    no secret be required. Optional. Defaults to false.
-#  [port] Port which drbd will use for replication on both hosts.
-#     Optional. Defaults to 7789.
-#  [protocol] Protocol to use for drbd. Optional. Defaults to 'C'
-#     http://www.drbd.org/users-guide/s-replication-protocols.html
-#  [verify_alg] Algorithm used for block validation on peers. Optional.
-#    Defaults to crc32c. Accepts crc32c, sha1, or md5.
-#  [disk_parameters] Parameters for disk{} section
-#  [handlers_parameters] Parameters for handlers{} section
-#  [startup_parameters] Parameters for startup{} section
-#  [manage] If the actual drbd resource shoudl be managed.
-#  [ha_primary] If the resource is being applied on the primary host.
-#  [initial_setup] If this run is associated with the initial setup. Allows a user
-#    to only perform dangerous setup on the initial run.
-#  [initialize] If the actual drbd resource should be initialized
-#  [up] If the actual drbd resource should be set 'up' (drbdadmin up)
+# @param host1
+#   Name of first host. Required unless $cluster is set.
+# @param host2
+#   Name of second host. Required unless $cluster is set.
+# @param ip1
+#   Ipaddress of first host. Required unless $cluster or $res1/$res2 is set.
+# @param ip2
+#   Ipaddress of second host. Required unless $cluster or $res1/$res2 is set.
+# @param res1
+#   First stacked resource name.
+# @param res2
+#   Second stacked resource name.
+# @param cluster
+# @param disk
+#   Name of disk to be replicated. Assumes that the
+#   name of the disk will be the same on both hosts. Required.
+# @param metadisk
+#   Name of the metadisk. Allows to use an external metadisk. Assumes
+#   that the name of the metadisk will be the same on both hosts. Defaults to internal
+#   this parameter is ignored if flexible_metadisk is defined
+# @param flexible_metadisk
+#   Name of the flexible_metadisk
+#   defaults to undef. If defined, the metadisk parameter is superseeded
+# @param secret
+#   The shared secret used in peer authentication.. False indicates that
+#   no secret be required. Optional. Defaults to false.
+# @param port
+#   Port which drbd will use for replication on both hosts.
+#   Optional. Defaults to 7789.
+# @param mountpoint
+# @param automount
+# @param device
+# @param owner
+# @param group
+# @param protocol
+#   Protocol to use for drbd. Optional. Defaults to 'C'
+#   http://www.drbd.org/users-guide/s-replication-protocols.html
+# @param verify_alg
+#   Algorithm used for block validation on peers. Optional.
+#   Defaults to crc32c. Accepts crc32c, sha1, or md5.
+# @param rate
+# @param disk_parameters
+#   Parameters for disk{} section
+# @param net_parameters
+# @param handlers_parameters
+#   Parameters for handlers{} section
+# @param startup_parameters
+#   Parameters for startup{} section
+# @param manage
+#   If the actual drbd resource shoudl be managed.
+# @param ha_primary
+#   If the resource is being applied on the primary host.
+# @param initial_setup
+#   If this run is associated with the initial setup. Allows a user
+#   to only perform dangerous setup on the initial run.
+# @param initialize
+#   If the actual drbd resource should be initialized
+# @param up
+#   If the actual drbd resource should be set 'up' (drbdadmin up)
+# @param fs_type
+# @param mkfs_opts
+#
 define drbd::resource (
   $host1                                                      = undef,
   $host2                                                      = undef,
