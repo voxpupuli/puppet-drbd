@@ -93,7 +93,7 @@ define drbd::resource::up (
         require => [
           Exec["drbd_make_primary_again_${name}"],
           File[$mountpoint],
-          Service['drbd']
+          Service['drbd'],
         ],
       }
     }
