@@ -1,6 +1,6 @@
 # DRBD module for Puppet
 
-[![Build Status](https://travis-ci.org/voxpupuli/puppet-drbd.png?branch=master)](https://travis-ci.org/voxpupuli/puppet-drbd)
+![Build Status](https://github.com/voxpupuli/puppet-drbd/actions/workflows/ci.yml/badge.svg?branch=master)
 [![Code Coverage](https://coveralls.io/repos/github/voxpupuli/puppet-drbd/badge.svg?branch=master)](https://coveralls.io/github/voxpupuli/puppet-drbd)
 [![Puppet Forge](https://img.shields.io/puppetforge/v/puppet/drbd.svg)](https://forge.puppetlabs.com/puppet/drbd)
 [![Puppet Forge - downloads](https://img.shields.io/puppetforge/dt/puppet/drbd.svg)](https://forge.puppetlabs.com/puppet/drbd)
